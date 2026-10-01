@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+ <meta name="theme-color" content="#101b25"><title>SKYBREAK — Missile Dogfight</title>
+ <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230b202d'/%3E%3Cpath d='M32 9 53 49 32 39 11 49Z' fill='%23a7f3d0'/%3E%3C/svg%3E">
+ <link rel="stylesheet" href="./style.css">
+ <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+ <main id="game" aria-label="SKYBREAK 3D air combat game"><canvas id="world" aria-label="3D flight arena"></canvas><canvas id="hud" aria-label="Flight instruments, radar, and targeting display"></canvas><output id="flight-telemetry" class="sr-only" aria-label="Flight telemetry" aria-live="off"></output></main>
+ <div id="vignette"></div><div id="damage"></div>
+ <header class="topbar"><a class="wordmark" href="./" aria-label="Skybreak main menu"><span class="brand-symbol">↗</span> SKYBREAK<span class="edition">/ AIR COMBAT</span></a><div class="top-controls"><span id="quality-label">HIGH FIDELITY</span><button id="sound" title="Toggle sound" aria-label="Toggle sound">SOUND ON</button><button id="fullscreen" aria-label="Toggle fullscreen">⛶</button><button id="pause" aria-label="Pause game" hidden>Ⅱ</button></div></header>
+ <section id="menu" class="menu" aria-label="Flight setup">
+  <div class="menu-copy"><div class="eyebrow"><i></i> FREE-FLIGHT DOGFIGHT / SOLO</div><h1>Own the<br><em>open sky.</em></h1><p class="intro">Get on their six. Acquire a lock.<br>Let the missile do the chasing.</p>
+   <div class="brief"><span>OPERATION 01</span><b>NORTH POINT AIRFIELD</b><p>Close-range combat over a coastal airfield.<br>Full loops. Twin missiles. Three rival pilots.</p></div>
+   <div class="setup"><label>OPPOSITION<select id="difficulty"><option value="rookie" selected>Rookie · learn the skies</option><option value="ace">Ace · fight back</option><option value="veteran">Veteran · no breathing room</option></select></label><label>GRAPHICS<select id="quality"><option value="high">High · atmospheric</option><option value="performance">Performance · lighter</option></select></label></div>
+   <button id="launch" class="launch" disabled><span id="launch-text">PREPARING AIRCRAFT</span><span>↗</span></button>
+   <p class="start-note" id="start-note">Loading the flight system…</p>
+  </div>
+  <aside class="flight-manual"><span class="eyebrow">YOUR AIRCRAFT</span><h2>VX–09 <span>KESTREL</span></h2><p>Strike fighter / unrestricted arcade flight</p><div class="specs"><div><b>990</b><span>MAX SPEED · KM/H</span></div><div><b>FOX–2</b><span>GUIDED MISSILES</span></div></div><div class="manual-line"></div><span class="eyebrow">FLIGHT CONTROLS</span><dl><div><dt>Mouse / ↑ ↓ ← →</dt><dd>Steer & aim</dd></div><div><dt>Click / Space</dt><dd>Dual missile volley</dd></div><div><dt>W / S</dt><dd>Throttle / airbrake</dd></div><div><dt>A / D</dt><dd>Roll left / right</dd></div><div><dt>Shift</dt><dd>Afterburner</dd></div><div><dt>F</dt><dd>Deploy flares</dd></div><div><dt>C / Esc</dt><dd>Camera / pause</dd></div></dl><p class="manual-tip">Hold an enemy in the segmented ring. Yellow acquires; red confirms a missile lock. A/D rolls freely, R performs a full roll.</p></aside>
+  <div class="menu-bottom"><span>BUILT FOR THE CHASE</span><span>3D WEBGL · ORIGINAL ARCADE FLIGHT</span></div>
+ </section>
+ <div id="flight-ui" hidden><div class="mission-tag"><span>NORTH POINT</span><b id="wave">SORTIE 01</b></div><div id="notice" role="status"></div><div class="bottom-instructions"><span><kbd>SPACE</kbd> MISSILE</span><span><kbd>F</kbd> FLARES</span><span><kbd>SHIFT</kbd> BOOST</span><span><kbd>ESC</kbd> PAUSE</span></div><div class="score"><span>CONFIRMED KILLS</span><b id="kills">00</b></div></div>
+ <section id="pause-panel" class="dialog-layer" hidden aria-label="Paused"><div class="dialog"><span class="eyebrow">FLIGHT SUSPENDED</span><h2>Catch your breath.</h2><p>Mouse or arrows steer the nose. A/D rolls the aircraft. Keep an enemy inside the ring until it turns red, then fire paired homing missiles. Fly below the hills to break line of sight.</p><div class="pause-settings"><label><input id="invert" type="checkbox"> Invert vertical steering</label><label>Sensitivity <input id="sensitivity" type="range" min="0.5" max="1.8" step=".1" value="1"></label></div><button id="resume" class="launch">RESUME FLIGHT <span>↗</span></button><button id="restart" class="secondary">Restart sortie</button><button id="return-menu" class="secondary">Return to hangar</button></div></section>
+ <section id="end-panel" class="dialog-layer" hidden aria-label="Sortie result"><div class="dialog"><span class="eyebrow">SORTIE COMPLETE</span><h2 id="end-title">Aircraft lost.</h2><p id="end-reason"></p><div class="end-stats"><div><b id="end-kills">0</b><span>KILLS</span></div><div><b id="end-time">0:00</b><span>SURVIVED</span></div><div><b id="best">0</b><span>PERSONAL BEST</span></div></div><button id="retry" class="launch">FLY AGAIN <span>↗</span></button><button id="hangar" class="secondary">Back to hangar</button></div></section>
+ <section id="error-panel" class="dialog-layer" hidden><div class="dialog"><h2>Graphics unavailable.</h2><p id="error-text">This game needs a browser with WebGL 2 enabled.</p><button class="launch" onclick="location.reload()">TRY AGAIN ↗</button></div></section>
+ <div id="touch-controls" hidden><div id="joystick"><div></div></div><div class="touch-actions"><button id="touch-boost">BOOST</button><button id="touch-flare">FLARE</button><button id="touch-fire">FIRE</button></div></div>
+ <script type="module" src="./main.js"></script>
+</body></html>
+
