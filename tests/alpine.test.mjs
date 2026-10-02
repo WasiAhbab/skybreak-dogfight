@@ -66,7 +66,7 @@ test('static airframe batching preserves transforms and excludes live exhaust me
  near(geometry.boundingBox.min.x,-.5);near(geometry.boundingBox.max.x,6.5);assert.equal(geometry.attributes.position.count,144);
 });
 test('theaters are isolated: mountain flight cannot hit hidden coastal structures',()=>{
- assert.match(game,/state\.arena!=='coastal'\|\|seen\.has\(obstacle\)/);
+ assert.match(game,/state\.arena!==obstacle\.arena\|\|seen\.has\(obstacle\)/);
  assert.match(game,/for\(const g of activeGates\(\)\)if\(!g\.passed/);
  assert.match(game,/terrainHeight\(x,z\)\)\+padding/);
  assert.match(game,/const alpha=clamp\(accumulator\/FIXED,0,1\);player\.sync\(alpha\)/);

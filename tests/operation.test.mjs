@@ -156,6 +156,7 @@ function phaseHarness() {
     return nodes.get(id);
   };
   const ctx = vm.createContext({
+    cannonMode: () => false,
     state,
     player,
     C,

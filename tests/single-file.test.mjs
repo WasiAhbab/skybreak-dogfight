@@ -26,8 +26,8 @@ test('localhost entry is the complete standalone HTML, not a wrapper',()=>{
  assert.doesNotMatch(html,/<script[^>]*\bsrc=|<link[^>]*rel="stylesheet"|import\s.*from\s*['"]\.\//);
  assert.match(html,/<style>[\s\S]+<\/style>/);assert.ok(html.endsWith('</html>\n'));
 });
-test('current game has missile-only weapons, target validation and no rapid-fire cannon',()=>{
- assert.doesNotMatch(game,/fire\(.*cannon|C\.makeGun|C\.trigger|player\.gun/);
+test('missile operations retain target validation alongside the separate cannon modes',()=>{
+ assert.match(game,/state\.missionMode==='duel'\|\|state\.missionMode==='laststand'/);
  const fire=game.slice(game.indexOf('function fireMissile('),game.indexOf('function feed('));
  assert.ok(fire.indexOf('!eligibleTarget(seeker.target)')<fire.indexOf('C.launchReady(jet.launcher)'));
  assert.match(game,/shot\.owner=null;shot\.target=null;freeShots\.push\(shot\)/);

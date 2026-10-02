@@ -4,9 +4,10 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
-test('all three complete delivered scripts pass the JavaScript parser', () => {
+test('all four complete delivered scripts pass the JavaScript parser', () => {
   for (const pattern of [
     /<script id="flight-core">([\s\S]*?)<\/script>/,
+    /<script id="duel-core">([\s\S]*?)<\/script>/,
     /<script id="battle-audio">([\s\S]*?)<\/script>/,
     /<script type="module" id="game-code">([\s\S]*?)<\/script>/
   ]) {

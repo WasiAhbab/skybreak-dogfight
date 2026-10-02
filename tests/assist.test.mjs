@@ -71,6 +71,7 @@ function mouseHarness(assist = true) {
   const pilotAim = new THREE.Vector3(0, 0, -1),
     look = { yaw: 0, pitch: 0 };
   const ctx = vm.createContext({
+    state: { grounded: false },
     THREE,
     C,
     clamp: C.clamp,

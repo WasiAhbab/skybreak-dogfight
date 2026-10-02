@@ -64,6 +64,7 @@ function cameraHarness() {
     shake: 0
   };
   const ctx = vm.createContext({
+    railModel: {visible:false},
     THREE,
     C,
     clamp: C.clamp,

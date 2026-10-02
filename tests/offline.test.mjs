@@ -27,7 +27,14 @@ test('offline bundle preserves the authored flight core and every gameplay funct
   const core = (html) => html.match(/<script id="flight-core">([\s\S]*?)<\/script>/)[1];
   const game = (html) => html.match(/function startGame\(THREE\)\s*\{([\s\S]*?)<\/script>/)[1];
   assert.equal(core(offline), core(canonical));
-  assert.equal(offline.match(/<script id="battle-audio">([\s\S]*?)<\/script>/)[1], canonical.match(/<script id="battle-audio">([\s\S]*?)<\/script>/)[1]);
+  assert.equal(
+    offline.match(/<script id="duel-core">([\s\S]*?)<\/script>/)[1],
+    canonical.match(/<script id="duel-core">([\s\S]*?)<\/script>/)[1]
+  );
+  assert.equal(
+    offline.match(/<script id="battle-audio">([\s\S]*?)<\/script>/)[1],
+    canonical.match(/<script id="battle-audio">([\s\S]*?)<\/script>/)[1]
+  );
   assert.equal(game(offline), game(canonical).replace('WEBGL / READY', 'OFFLINE / READY'));
 });
 test('offline module dependencies are fully closed over the embedded core', () => {

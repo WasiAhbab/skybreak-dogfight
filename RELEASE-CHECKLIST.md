@@ -1,8 +1,14 @@
-# SKYBREAK 2.1 — release gates
+# SKYBREAK 3.0 — release gates
 
 Status: improved, locally playable release candidate. Not a certified simulator, multiplayer service, or a claim of bug-free commercial production readiness.
 
 ## Implemented and checked
+
+- Five-round AI Duel Series with 120-second round clocks, one-point wins, scoreless draws, opponent rotation, verdict/countdown phases and identical 500 m cannon loadouts.
+- Cannon heat, swept compound hitboxes, terrain obstruction, four-hit lethality, animated landing gear with real drag, and a separate Last Stand railgun defence mode.
+- Seven new original procedural arenas in addition to Rift Valley and North Point. Lazy construction, static batching, theater-isolated collision, matching terrain triangles, open bridges and rotating turbine hitboxes are covered by runtime tests.
+- Local browser checks cover arena selection/rendering, one-rival duels, AI cannon damage and round progression, gear, pause, Last Stand ejection and railgun recharge. These checks do not replace human playtesting.
+- Version 3 passes 166 automated checks. Browser play confirmed four manual cannon shots → four hits → one kill → 1–0 round score, pause during the verdict, and a full five-round AI loss series with final results and rotating callsigns. Arena selection/shader compilation produced no browser errors in this session; observed play was around 60 FPS on this machine, not a universal guarantee.
 
 - Lift-driven sport flight, coordinated banking, energy loss/gain, spool, real airbrake, angle-of-attack limiting and a bounded G envelope.
 - Easy mouse-heading assist, keyboard override, wings-level recovery, close/wide chase and pilot view.
@@ -19,7 +25,7 @@ Status: improved, locally playable release candidate. Not a certified simulator,
 1. **Browser/device matrix:** test current Safari, Chrome and Firefox on actual macOS devices, plus the intended Windows browsers. Test mouse capture, trackpad fallback, screen resizing, fullscreen, audio, keyboard shortcuts, reduced motion, browser back/forward and focus loss. Listen on headphones and laptop speakers; check voice intelligibility over engine/music, no clipping, incoming-callout priority, speech-engine failure and offline installed-voice availability. Embedded-browser results do not replace this.
 2. **Performance gate:** run a 20–30 minute seven-enemy session on each minimum-spec device. Record frame times, memory trend and graphics errors. Target a stable 60 FPS on the chosen recommended hardware and usable Performance mode on minimum-spec hardware; declare that hardware explicitly.
 3. **Gameplay gate:** have at least five unfamiliar players complete launch → steer → lock → fire → evade → pause → restart without explanation. Record time to first hit, control confusion, motion sickness and difficulty. Tune from that evidence, not from a subjective “10/10” promise.
-4. **Regression gate:** complete an eight-kill operation, lose all three lives, resume a paused respawn, test flares against live enemies, fly through every coastal opening and confirm both theaters at all enemy counts. Automated unit checks cover the rules, but a rendered full-playthrough test is still needed.
+4. **Regression gate:** complete an eight-kill operation, lose all three lives, resume a paused respawn, test flares, fly through every coastal opening, and confirm all nine theaters. Play a complete duel series with wins, losses and timeouts, pause between rounds, and complete Last Stand from both ejection and combat destruction. Automated tests cover rule boundaries, but rendered outcome and control feel require playtesting.
 5. **Failure gate:** cold-load with the internet unavailable on localhost; test blocked local storage, missing renderer, WebGL disabled, context loss, audio permission failure and an occupied server port. Verify that the downloadable offline HTML also opens directly in supported browsers. Direct-file launch is not verified in the in-app browser because that browser blocks file URLs.
 6. **Public deployment:** serve the public game files over HTTPS using a maintained static host with correct JavaScript MIME types, compression, cache revalidation and security headers. Do not expose the localhost development server to the internet. No account system, backend database or multiplayer authority is implemented.
 7. **Release hygiene:** retain the Three.js MIT attribution, choose a license for the original game code, document supported controls/hardware, add a versioned changelog and provide a way for players to report bugs. Enable the optional Actions template using a credential authorized to manage workflows; this initial deployment does not activate it.
