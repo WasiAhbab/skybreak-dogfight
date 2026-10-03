@@ -399,6 +399,7 @@ function worldHarness() {
     buildings,
     obstacleGrid,
     theaters,
+    unitBox: unit,
     CELL: 300,
     FORWARD: new THREE.Vector3(0, 0, -1),
     groundTexture: new THREE.Texture(),

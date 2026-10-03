@@ -1,6 +1,23 @@
-# SKYBREAK — The Duel Edition
+# SKYBREAK — Glass Meridian (v4)
 
-An original, single-player browser flight game. Version 3 defaults to **AI Duel Series**: one rival at a time, five two-minute rounds, manual cannons, and identical SF–29 loadouts. Missile Operation, Free Hunt and Flight Practice remain available. There is no multiplayer backend, account, paid key or shared online score.
+An original, single-player browser flight game. Version 4 adds a six-mission campaign, local pilot progression, countermeasure decoys, threat visualization and configurable cinematic rendering. **AI Duel Series** still uses one rival at a time, five two-minute rounds, manual cannons and equal-performance SF–29 loadouts. Missile Operation, Free Hunt, Last Stand and Flight Practice remain available. There is no multiplayer backend, account, paid key or shared online score.
+
+## New in Glass Meridian
+
+- **Readable missile threats:** bright red hostile exhaust/tracers, triangular missile markers, off-screen indicators, range, closing-time estimate and left/right warning tones. The alarm accelerates with time-to-impact. Colourblind mode substitutes amber and retains shape/text information.
+- **Reliable countermeasures:** F creates a two-second decoy cloud with a 1,100 m capture radius and 2.5-second recharge. Approaching seekers turn toward the displaced cloud, including missiles arriving after deployment. Captured missiles cannot reacquire; their aircraft proximity fuse is disabled, but direct impacts still count. Last-instant flares are not invulnerability.
+- **Local career:** 100 XP per kill, 200 per sortie victory, 300 bonus XP for five daily kills (UTC reset, once per day). Three cosmetic SF–29 configurations and three liveries unlock at published thresholds. Configurations share physics and hitboxes; they are not three independently simulated aircraft types. Settings and progress use this browser's localStorage, not a cloud account.
+- **Six connected campaign sorties:** coastal interception; a 90-second airborne escort; a three-relay bombing strike with gravity bombs and an impact predictor; storm interception; night interception; and a 300-health ace boss. Completing a mission unlocks the next; unlocked missions remain replayable. Three lives per mission. Respawn downtime does not consume the objective timer.
+- **AI tactics:** aggressive, defensive and stand-off/sniper styles. Rookie, Regular, Veteran and Ace tune pursuit/firing/defensive behaviour; Training suppresses enemy fire. Equal duel damage is preserved.
+- **Expanded missile loadout:** agile IR (2,400 m lock, 3.5-second motor) or faster, less agile LR (3,600 m lock, five-second motor). Both reload in one second. T gives a three-second afterburner burst with a 12-second activation cooldown outside cannon modes. Green repair caches restore 35 health; gold resupply caches reset weapon/flare/boost cooldowns. Missiles remain unlimited; these are cooldown pickups, not finite-ammunition crates.
+- **Weather and lighting:** clear, sunset, fog, storm rain, night or a gradual time cycle across the existing arenas. Campaign weather is mission-authored. Lit city window bands and instanced runway edge lights improve night navigation. Weather is visual/visibility-based, not a new wind/turbulence physics model.
+- **Cinematic options:** light screen-space bloom, optional high-speed radial blur, localized engine heat shimmer, wingtip vapour, a supersonic shock ring, damage smoke/sparks, destruction debris and a 3D display bay. These are performance-conscious procedural effects, not AAA assets or physically simulated volumetrics.
+- **Uninterrupted combat:** no kill-cam or slow-motion replay. Kills immediately return to the active engagement; the ordinary duel round-result transition remains.
+- **Readable HUD:** glass/classic/minimal layouts, cyan/green/amber colours, adjustable text/panel scale, FPS toggle and persistent preferences. Auto-quality switches from High to Performance after sustained sub-35 FPS samples. Touch controls include boost and strike bombs; desktop remains the primary target.
+
+New keys: **T** afterburner; **U** gravity bomb during the strike mission. Use **F** as soon as the close-missile warning requests it, then turn away. Ordinary collision and terrain hazards remain active.
+
+The campaign route selector is a six-step mission list, not a geographical mission-map editor. New systems have automated regression coverage; cross-device balancing, full campaign human playthroughs, gamepad controls, advanced structural damage and online multiplayer remain future work. Do not describe the game as bug-free or certified production-ready.
 
 This is not GTA V or MTA, and does not reproduce their private physics or licensed maps. All aircraft, environments, textures, music and interface graphics are procedural originals. Flight is a tuned sport-flight game model, not a certified simulator.
 
@@ -22,7 +39,7 @@ Node.js 20+, WebGL 2 and browser graphics acceleration are required. No dependen
 
 ## Files and packaging
 
-- `public/index.html`: complete authored game: HTML, CSS, four inline scripts, shaders, procedural assets and audio.
+- `public/index.html`: complete authored game: HTML, CSS, inline gameplay scripts, shaders, procedural assets and audio.
 - `public/skybreak.html`: byte-identical standalone source entry.
 - `public/vendor/`: local Three.js 0.180.0 renderer and MIT attribution. The source HTML falls back to unpkg only if the local renderer is unavailable.
 - `public/offline/index.html`: portable HTML with the renderer embedded. Regenerate it after edits with `npm run build:offline`.
@@ -110,7 +127,7 @@ Any theater works with any mode. New arenas build lazily; static geometry is bat
 
 The compact missile ring acquires in 0.35 seconds with assisted flight or 0.65 seconds in classic mode, within 2,400 m and clear line of sight. Every launch reloads in one second. Once launched, a missile retains its original target. A five-metre swept proximity fuse requires an unobstructed path to the target. After 3.5 seconds of powered guidance, the missile falls ballistically; lifetime is capped at 12 seconds.
 
-Player missiles deal 100 damage; AI missiles deal 38. These asymmetric missile settings are separate from the identical duel cannon loadouts. Flares recharge in 2.5 seconds and divert nearby seekers inside 750 m without erasing their projectiles. A ballistic missile can still collide.
+Player missiles deal 100 damage; AI missiles deal 38. These asymmetric missile settings are separate from the identical duel cannon loadouts. Flares recharge in 2.5 seconds and create a two-second decoy cloud that captures seekers inside 1,100 m without erasing their projectiles. A direct impact can still collide; turn away after deploying.
 
 ## Flight, graphics and audio
 

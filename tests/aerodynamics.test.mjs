@@ -13,7 +13,11 @@ const C = context.C,
 const neutral = { pitch: 0, roll: 0, yaw: 0, throttle: 0, missile: false };
 function aircraft(pitch = 0, bank = 0) {
   const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch, 0, bank));
-  return { q, v: new THREE.Vector3(0, 0, -140).applyQuaternion(q), angular: { pitch: 0, roll: 0, yaw: 0 } };
+  return {
+    q,
+    v: new THREE.Vector3(0, 0, -140).applyQuaternion(q),
+    angular: { pitch: 0, roll: 0, yaw: 0 }
+  };
 }
 function simulate(body, seconds, input = {}, throttle = trim, dt = 1 / 120) {
   for (let i = 0; i < Math.round(seconds / dt); i++)
@@ -87,7 +91,11 @@ test('wings-level recovery works from a climbing bank without changing fire comm
   const f = new THREE.Vector3(0, 0, -1).applyQuaternion(b.q),
     right = new THREE.Vector3(1, 0, 0).applyQuaternion(b.q);
   assert.ok(Math.abs(f.y) < 0.01 && Math.abs(right.y) < 0.01);
-  const recovered = C.recoveryInput(b.q, { ...neutral, missile: true, brake: true });
+  const recovered = C.recoveryInput(b.q, {
+    ...neutral,
+    missile: true,
+    brake: true
+  });
   assert.equal(recovered.missile, true);
   assert.equal(recovered.brake, false);
 });
@@ -152,6 +160,7 @@ test('actual AI update obeys the shared physics and survives an extended clear-a
     });
   let steps = 0;
   const ctx = vm.createContext({
+    escort: null,
     THREE,
     C: {
       ...C,
@@ -165,7 +174,11 @@ test('actual AI update obeys the shared physics and survives an extended clear-a
     state: { difficulty: 'practice', time: 0, arena: 'alpine' },
     shots: [],
     enemies: [e],
-    player: { p: new THREE.Vector3(0, 2600, 0), v: new THREE.Vector3(0, 0, -140), invulnerable: 0 },
+    player: {
+      p: new THREE.Vector3(0, 2600, 0),
+      v: new THREE.Vector3(0, 0, -140),
+      invulnerable: 0
+    },
     terrainHeight: () => 0,
     worldHit: () => null,
     activeGates: () => [],

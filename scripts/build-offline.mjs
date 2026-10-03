@@ -12,6 +12,7 @@ const [html, core, renderer, license] = await Promise.all([
   readFile(path.join(directory, 'vendor/THREE-LICENSE.txt'), 'utf8')
 ]);
 if (!core.includes("const REVISION = '180'")) throw new Error('Unexpected vendored Three.js release');
+await writeFile(path.join(directory, 'skybreak.html'), html);
 const safeJSON = (value) => JSON.stringify(value).replaceAll('<', '\\u003c');
 const library =
   '<script type="application/json" id="bundled-three-core">' +

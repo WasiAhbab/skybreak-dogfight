@@ -56,7 +56,11 @@ test('flight remains finite through sustained maneuvers at low and high energy',
   for (let i = 0; i < 12000; i++) {
     const speed = fly(
       b,
-      { pitch: Math.sin(i * 0.003), roll: Math.cos(i * 0.001), yaw: Math.sin(i * 0.007) },
+      {
+        pitch: Math.sin(i * 0.003),
+        roll: Math.cos(i * 0.001),
+        yaw: Math.sin(i * 0.007)
+      },
       (Math.sin(i * 0.0009) + 1) / 2
     );
     assert.ok(speed >= 0 && speed <= 360);
@@ -142,7 +146,12 @@ function phaseHarness() {
   };
   const nodes = new Map(),
     events = [],
-    player = { p: new THREE.Vector3(), mesh: { visible: true }, snapshot() {}, sync() {} };
+    player = {
+      p: new THREE.Vector3(),
+      mesh: { visible: true },
+      snapshot() {},
+      sync() {}
+    };
   const $ = (id) => {
     if (!nodes.has(id))
       nodes.set(id, {
@@ -156,6 +165,7 @@ function phaseHarness() {
     return nodes.get(id);
   };
   const ctx = vm.createContext({
+    campaign: null,
     cannonMode: () => false,
     state,
     player,
@@ -255,7 +265,7 @@ test('operation clock continues during redeployment and can expire before respaw
 });
 test('formatted single-file code still contains documented runtime systems', () => {
   assert.match(game, /C\.proximityHit\(/);
-  assert.match(game, /const burning=shot\.age<3\.5/);
+  assert.match(game, /const burning=shot\.age<\(shot\.longrange\?5:3\.5\)/);
   assert.match(game, /if\(!burning\)\{shot\.v\.y-=9\.81\*dt/);
   assert.match(html, /target-markers/);
   assert.match(game, /function drawFlightDirector/);

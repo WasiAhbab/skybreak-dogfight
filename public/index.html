@@ -6,9 +6,9 @@
     <meta name="theme-color" content="#202624" />
     <meta
       name="description"
-      content="SKYBREAK: five-round AI cannon duels, nine original flight arenas, and Last Stand ground defence. A single-file WebGL game."
+      content="SKYBREAK: six campaign missions, AI duels, nine arenas, pilot progression and missile combat. An original browser flight game."
     />
-    <title>SKYBREAK — The Duel Edition</title>
+    <title>SKYBREAK — Glass Meridian</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23202624'/%3E%3Cpath d='M32 7 36 30 57 43 57 49 35 43 35 52 41 57 23 57 29 52 29 43 7 49 7 43 28 30Z' fill='%23f0d5aa'/%3E%3C/svg%3E"
@@ -1744,6 +1744,158 @@
           }
         }
       }
+      :root {
+        --avionics: #a9ece7;
+        --hud-scale: 1;
+      }
+      .expedition {
+        margin: 16px 0;
+        border-top: 1px solid #b6cdda32;
+        padding-top: 14px;
+      }
+      .expedition summary {
+        cursor: pointer;
+        color: #dce9e7;
+        font: 11px monospace;
+        letter-spacing: 2px;
+        padding: 8px 0;
+      }
+      .exp-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 12px;
+      }
+      .exp-grid label {
+        display: grid;
+        gap: 7px;
+        color: #b6cdd6;
+        font: 10px monospace;
+        letter-spacing: 1px;
+      }
+      .exp-grid select {
+        width: 100%;
+        min-width: 0;
+        padding: 10px;
+        color: #f2f5ec;
+        background: #17232e;
+        border: 1px solid #819ca144;
+        border-radius: 5px;
+      }
+      #career-line,
+      #challenge-line,
+      #campaign-copy {
+        color: #b8cdd6;
+        font: 11px/1.7 monospace;
+        margin: 10px 0;
+      }
+      #career-line {
+        color: #edc98d;
+      }
+      #mission-map {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 5px;
+        margin: 10px 0;
+      }
+      #mission-map button {
+        padding: 10px 0;
+        background: #122333;
+        color: #8ba6b0;
+        border: 1px solid #526773;
+        border-radius: 5px;
+      }
+      #mission-map button[aria-pressed='true'] {
+        background: #c3dfda;
+        color: #12222b;
+      }
+      #mission-map button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      #threat-banner {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #ffe9e5;
+        background: #7b1224e8;
+        border: 1px solid #ff8c8c;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-align: center;
+        font: bold 12px/1.7 monospace;
+        pointer-events: none;
+        max-width: 80vw;
+      }
+      #threat-banner[hidden],
+      #campaign-status[hidden] {
+        display: none;
+      }
+      #campaign-status {
+        position: absolute;
+        top: 112px;
+        left: 25px;
+        max-width: 360px;
+        padding: 12px 16px;
+        border-left: 2px solid var(--avionics);
+        background: #10212dcb;
+        font: 11px/1.7 monospace;
+        color: var(--avionics);
+      }
+      #aux-status {
+        position: absolute;
+        right: 28px;
+        top: 130px;
+        text-align: right;
+        font: 10px/1.8 monospace;
+        color: var(--avionics);
+        white-space: pre-line;
+      }
+      body[data-hud='glass'] .mission,
+      body[data-hud='glass'] .tally,
+      body[data-hud='glass'] .mode-tag {
+        background: #152f3c75;
+        backdrop-filter: blur(8px);
+        border: 1px solid #c2e7ef33;
+        border-radius: 12px;
+        padding: 10px 14px;
+      }
+      body[data-hud='minimal'] .flight-keys,
+      body[data-hud='minimal'] .mission,
+      body[data-hud='minimal'] .tally {
+        display: none;
+      }
+      #flight-ui {
+        font-size: calc(12px * var(--hud-scale));
+      }
+      #flight-ui .mission,
+      #flight-ui .tally,
+      #campaign-status,
+      #aux-status {
+        zoom: var(--hud-scale);
+      }
+      body:not(.playing) .masthead {
+        background: linear-gradient(#0b1825ed, #0b182500);
+      }
+      #aux-status {
+        top: 200px;
+      }
+      @media (max-width: 850px) {
+        #campaign-status {
+          top: 155px;
+          max-width: 220px;
+          font-size: 9px;
+        }
+        #aux-status {
+          top: 200px;
+          right: 12px;
+          font-size: 9px;
+        }
+        .exp-grid {
+          gap: 8px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1760,7 +1912,7 @@
       <a href="./" class="brand" aria-label="Skybreak hangar"
         ><svg viewBox="0 0 40 48" aria-hidden="true">
           <path d="M20 1 23 21 38 32 38 36 22 31 22 41 28 46 12 46 18 41 18 31 2 36 2 32 17 21Z" /></svg
-        >SKYBREAK<small>THE DUEL EDITION / VOL. 06</small></a
+        >SKYBREAK<small>GLASS MERIDIAN / VOL. 07</small></a
       >
       <div class="tools">
         <span id="engine-status">INITIALIZING</span
@@ -1773,7 +1925,8 @@
     <section id="briefing" aria-label="Flight setup">
       <div class="briefing-copy">
         <div class="kicker">
-          <i class="live-dot"></i> <span id="theater-kicker">RIFT VALLEY / AIR SUPERIORITY</span>
+          <i class="live-dot"></i>
+          <span id="theater-kicker">RIFT VALLEY / AIR SUPERIORITY</span>
         </div>
         <h1>ONE ON<span>ONE.</span></h1>
         <p class="intro" id="mission-brief">
@@ -1807,6 +1960,8 @@
           <label for="opposition"
             >ENGAGEMENT<select id="opposition">
               <option value="duel">Regular · combat pilot</option>
+              <option value="rookie">Rookie · relaxed pursuit</option>
+              <option value="veteran">Veteran · tactical pursuit</option>
               <option value="practice">Training · no return fire</option>
               <option value="ace">Ace · hard pursuit</option>
             </select></label
@@ -1832,9 +1987,51 @@
               <option value="operation">Operation · 8 kills / 3 lives / 4 minutes</option>
               <option value="freeflight">Free hunt · no time or life limit</option>
               <option value="familiarisation">Flight practice · empty airspace / no clock</option>
+              <option value="campaign">Campaign · Operation Glass Meridian</option>
             </select></label
           >
         </div>
+        <details class="expedition">
+          <summary>FLIGHT DECK / CAREER & CONDITIONS</summary>
+          <p id="career-line"></p>
+          <p id="challenge-line"></p>
+          <div class="exp-grid">
+            <label
+              >AIRFRAME<select id="airframe-choice">
+                <option value="0">SF–29 / Peregrine</option>
+                <option value="1">SF–29R / Recon · 600 XP</option>
+                <option value="2">SF–29E / Spectre · 1800 XP</option>
+              </select></label
+            >
+            <label
+              >LIVERY<select id="skin-choice">
+                <option value="0">Arctic alloy</option>
+                <option value="1">Desert brass · 300 XP</option>
+                <option value="2">Midnight carbon · 1000 XP</option>
+              </select></label
+            >
+            <label
+              >ATMOSPHERE<select id="weather-choice">
+                <option value="clear">Clear / midday</option>
+                <option value="sunset">Golden hour</option>
+                <option value="fog">Low visibility</option>
+                <option value="storm">Storm front</option>
+                <option value="night">Night operations</option>
+                <option value="cycle">Dynamic day → night</option>
+              </select></label
+            >
+            <label
+              >MISSILE LOADOUT<select id="weapon-choice">
+                <option value="standard">IR / agile · 1s reload</option>
+                <option value="longrange">LR / 3.6 km · 1s reload</option>
+              </select></label
+            >
+          </div>
+          <div id="campaign-setup" hidden>
+            <div id="mission-map" aria-label="Campaign missions"></div>
+            <p id="campaign-copy"></p>
+          </div>
+        </details>
         <button id="launch" class="launch" disabled>
           <span id="launch-label">LOADING FLIGHT SYSTEM</span><span>↗</span>
         </button>
@@ -1859,6 +2056,9 @@
       </footer>
     </section>
     <div id="flight-ui" hidden>
+      <div id="threat-banner" role="status" hidden></div>
+      <div id="campaign-status" hidden></div>
+      <div id="aux-status"></div>
       <div id="duel-score" hidden aria-label="Duel scoreboard">
         <div class="side">YOU<strong id="your-score">0</strong></div>
         <div id="duel-round">
@@ -1929,6 +2129,8 @@
               <dd>Landing gear / eject in Last Stand</dd>
               <dt>F</dt>
               <dd>Flares · 2.5-second cooldown</dd>
+              <dt>T / U</dt>
+              <dd>Afterburner burst / strike bomb (campaign strike only)</dd>
               <dt>R / C</dt>
               <dd>Recenter view / camera distance</dd>
               <dt>V</dt>
@@ -1948,6 +2150,30 @@
           <div>
             <div class="settings">
               <div class="kicker">FLIGHT PREFERENCES</div>
+              <label
+                >HUD style<select id="hud-style">
+                  <option value="glass">Glass flight deck</option>
+                  <option value="classic">Classic</option>
+                  <option value="minimal">Minimal</option>
+                </select></label
+              >
+              <label
+                >HUD colour<select id="hud-color">
+                  <option value="cyan">Cyan</option>
+                  <option value="green">Green</option>
+                  <option value="amber">Amber</option>
+                </select></label
+              >
+              <label
+                >HUD size<input id="hud-size" type="range" min="0.8" max="1.3" step="0.1" value="1"
+              /></label>
+              <label
+                ><input id="accessible-color" type="checkbox" /> Colourblind-friendly threats (shapes +
+                amber)</label
+              >
+              <label><input id="auto-quality" type="checkbox" checked /> Auto performance protection</label>
+              <label><input id="post-effects" type="checkbox" checked /> Bloom & cinematic lens</label>
+              <label><input id="show-fps" type="checkbox" checked /> Show FPS</label>
               <label><input id="flight-assist" type="checkbox" checked /> Assisted mouse flight</label>
               <label for="pause-quality"
                 >Visual quality<select id="pause-quality">
@@ -2070,9 +2296,128 @@
       <div class="touch-weapons">
         <button id="touch-up">THR +</button><button id="touch-down">THR −</button
         ><button id="touch-missile">MISSILE</button><button id="touch-flare">FLARE</button>
+        <button id="touch-boost">BOOST</button><button id="touch-bomb">BOMB</button>
       </div>
     </div>
     <noscript>This game requires JavaScript and WebGL 2. Enable JavaScript, then reload.</noscript>
+    <script id="expedition-core">
+      const ExpeditionCore = (() => {
+        const missions = [
+          {
+            name: 'First light',
+            arena: 'coastal',
+            weather: 'sunset',
+            type: 'intercept',
+            goal: 3,
+            duration: 180,
+            count: 3,
+            text: 'Meridian airspace has gone dark. Intercept three scouts over North Point before they report your position.'
+          },
+          {
+            name: 'Safe passage',
+            arena: 'farmland',
+            weather: 'clear',
+            type: 'escort',
+            goal: 0,
+            duration: 150,
+            count: 3,
+            text: 'Shepherd the unarmed survey aircraft for 90 seconds. Destroy pursuers before they reach it. BLUEBIRD must survive.'
+          },
+          {
+            name: 'Blind the net',
+            arena: 'desert',
+            weather: 'sunset',
+            type: 'strike',
+            goal: 3,
+            duration: 240,
+            count: 2,
+            text: 'Disable three relay installations. Fly over each marked site and release a gravity bomb with U. The diamond on the ground predicts impact.'
+          },
+          {
+            name: 'Storm crossing',
+            arena: 'windfarm',
+            weather: 'storm',
+            type: 'intercept',
+            goal: 4,
+            duration: 240,
+            count: 4,
+            text: 'Four interceptors wait behind the Aeolus storm front. Use the ridgelines for cover. Watch the turbine blades.'
+          },
+          {
+            name: 'Silent harbor',
+            arena: 'city',
+            weather: 'night',
+            type: 'intercept',
+            goal: 5,
+            duration: 240,
+            count: 4,
+            text: 'Clear five hostile aircraft from the evacuation corridor. The city is dark; keep one eye on ground clearance.'
+          },
+          {
+            name: 'The glass ace',
+            arena: 'alpine',
+            weather: 'clear',
+            type: 'boss',
+            goal: 1,
+            duration: 240,
+            count: 1,
+            text: 'The squadron leader holds Rift Valley. Defeat SABLE in an armoured aircraft: three missile hits. Your final engagement.'
+          }
+        ];
+        const number = (v, max = 1e8) => (Number.isFinite(v) ? Math.max(0, Math.min(max, Math.floor(v))) : 0);
+        function profile(raw, day = new Date().toISOString().slice(0, 10)) {
+          const p = raw && typeof raw === 'object' ? raw : {};
+          return {
+            version: 1,
+            xp: number(p.xp),
+            kills: number(p.kills),
+            wins: number(p.wins),
+            campaign: number(p.campaign, 6),
+            day,
+            daily: p.day === day ? number(p.daily, 5) : 0,
+            dailyClaimed: p.day === day && p.dailyClaimed === true,
+            best: number(p.best),
+            airframe: number(p.airframe, 2),
+            skin: number(p.skin, 2)
+          };
+        }
+        function award(p, event) {
+          let xp = 0;
+          if (event === 'kill') {
+            p.kills++;
+            p.daily = Math.min(5, p.daily + 1);
+            xp = 100;
+          }
+          if (event === 'win') {
+            p.wins++;
+            xp = 200;
+          }
+          if (p.daily >= 5 && !p.dailyClaimed) {
+            p.dailyClaimed = true;
+            xp += 300;
+          }
+          p.xp = Math.min(1e8, p.xp + xp);
+          return xp;
+        }
+        function missileThreat(p, v, mp, mv) {
+          const x = mp.x - p.x,
+            y = mp.y - p.y,
+            z = mp.z - p.z;
+          const distance = Math.hypot(x, y, z);
+          const closing = -((mv.x - v.x) * x + (mv.y - v.y) * y + (mv.z - v.z) * z) / Math.max(1, distance);
+          const eta = closing > 1 ? distance / closing : Infinity;
+          return {
+            distance,
+            eta,
+            interval: Math.max(0.12, Math.min(0.9, eta * 0.16))
+          };
+        }
+        function unlocked(xp, kind, index) {
+          return xp >= (kind === 'airframe' ? [0, 600, 1800] : [0, 300, 1000])[index];
+        }
+        return { missions, profile, award, missileThreat, unlocked };
+      })();
+    </script>
     <script id="flight-core">
       'use strict';
       const FlightCore = (() => {
@@ -2155,7 +2500,11 @@
           const forward = rotate({ x: 0, y: 0, z: -1 }, q),
             up = rotate({ x: 0, y: 1, z: 0 }, q),
             right = rotate({ x: 1, y: 0, z: 0 }, q);
-          const flow = { x: velocity.x / speed, y: velocity.y / speed, z: velocity.z / speed };
+          const flow = {
+            x: velocity.x / speed,
+            y: velocity.y / speed,
+            z: velocity.z / speed
+          };
           const upFlow = dot(up, flow);
           const liftAxis = {
             x: up.x - flow.x * upFlow,
@@ -2202,7 +2551,12 @@
           // lateral lift. Mouse heading control can still countersteer normally.
           const bankRate = clamp((-right.y * 9.81) / speed, -0.22, 0.22);
           if (Math.abs(bankRate) > 1e-8 && up.y > 0.15) {
-            const turn = { x: 0, y: Math.sin((-bankRate * dt) / 2), z: 0, w: Math.cos((bankRate * dt) / 2) };
+            const turn = {
+              x: 0,
+              y: Math.sin((-bankRate * dt) / 2),
+              z: 0,
+              w: Math.cos((bankRate * dt) / 2)
+            };
             const x = turn.w * q.x + turn.y * q.z,
               y = turn.w * q.y + turn.y * q.w;
             const z = turn.w * q.z - turn.y * q.x,
@@ -2307,7 +2661,13 @@
           const length = Math.hypot(forward.x, forward.z);
           const heading =
             length > 0.01 ? { x: forward.x / length, y: 0, z: forward.z / length } : { x: 0, y: 0, z: -1 };
-          return assistedInput(q, heading, { ...manual, pitch: 0, roll: 0, yaw: 0, brake: false });
+          return assistedInput(q, heading, {
+            ...manual,
+            pitch: 0,
+            roll: 0,
+            yaw: 0,
+            brake: false
+          });
         }
         function segmentBox(a, b, min, max, padding = 0) {
           let entry = 0,
@@ -2528,20 +2888,41 @@
           };
           const length = Math.hypot(desired.x, desired.y, desired.z);
           if (length < 1e-9) return { ...velocity };
-          const a = { x: velocity.x / speed, y: velocity.y / speed, z: velocity.z / speed },
-            b = { x: desired.x / length, y: desired.y / length, z: desired.z / length };
+          const a = {
+              x: velocity.x / speed,
+              y: velocity.y / speed,
+              z: velocity.z / speed
+            },
+            b = {
+              x: desired.x / length,
+              y: desired.y / length,
+              z: desired.z / length
+            };
           const angle = Math.acos(clamp(dot(a, b), -1, 1)),
             step = Math.min(angle, Math.max(0, turnRate) * dt);
           if (angle < 1e-8) return { x: b.x * speed, y: b.y * speed, z: b.z * speed };
-          let axis = { x: a.y * b.z - a.z * b.y, y: a.z * b.x - a.x * b.z, z: a.x * b.y - a.y * b.x };
+          let axis = {
+            x: a.y * b.z - a.z * b.y,
+            y: a.z * b.x - a.x * b.z,
+            z: a.x * b.y - a.y * b.x
+          };
           let axisLength = Math.hypot(axis.x, axis.y, axis.z);
           if (axisLength < 1e-8) {
             axis = Math.abs(a.y) < 0.9 ? { x: -a.z, y: 0, z: a.x } : { x: 0, y: a.z, z: -a.y };
             axisLength = Math.hypot(axis.x, axis.y, axis.z);
           }
-          axis = { x: axis.x / axisLength, y: axis.y / axisLength, z: axis.z / axisLength };
+          axis = {
+            x: axis.x / axisLength,
+            y: axis.y / axisLength,
+            z: axis.z / axisLength
+          };
           const s = Math.sin(step / 2),
-            q = { x: axis.x * s, y: axis.y * s, z: axis.z * s, w: Math.cos(step / 2) },
+            q = {
+              x: axis.x * s,
+              y: axis.y * s,
+              z: axis.z * s,
+              w: Math.cos(step / 2)
+            },
             r = rotate(a, q);
           return { x: r.x * speed, y: r.y * speed, z: r.z * speed };
         }
@@ -2590,7 +2971,12 @@
       const DuelCore = (() => {
         const ROUND_SECONDS = 120,
           ROUNDS = 5;
-        const CANNON = Object.freeze({ range: 500, speed: 1300, interval: 0.125, damage: 25 });
+        const CANNON = Object.freeze({
+          range: 500,
+          speed: 1300,
+          interval: 0.125,
+          damage: 25
+        });
         const arenas = Object.freeze({
           alpine: {
             name: 'Rift Valley',
@@ -2648,7 +3034,15 @@
           }
         });
         function create() {
-          return { round: 1, elapsed: 0, player: 0, rival: 0, results: [], settled: false, complete: false };
+          return {
+            round: 1,
+            elapsed: 0,
+            player: 0,
+            rival: 0,
+            results: [],
+            settled: false,
+            complete: false
+          };
         }
         function finish(series, result) {
           if (series.settled || series.complete || !['win', 'loss', 'draw'].includes(result)) return false;
@@ -2753,7 +3147,12 @@
       'use strict';
       const BattleAudio = (() => {
         const CUES = Object.freeze({
-          begin: { lines: ['Skybreak control. Weapons free. Good hunting.'], priority: 2, gap: 30, ttl: 5 },
+          begin: {
+            lines: ['Skybreak control. Weapons free. Good hunting.'],
+            priority: 2,
+            gap: 30,
+            ttl: 5
+          },
           practice: {
             lines: ['Skybreak control. Clear skies. You are cleared to fly.'],
             priority: 2,
@@ -2790,7 +3189,12 @@
             gap: 2.5,
             ttl: 2
           },
-          test: { lines: ['Skybreak control. Radio check. Loud and clear.'], priority: 6, gap: 0, ttl: 5 }
+          test: {
+            lines: ['Skybreak control. Radio check. Loud and clear.'],
+            priority: 6,
+            gap: 0,
+            ttl: 5
+          }
         });
         const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
         const frequency = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
@@ -2966,7 +3370,13 @@
               message.rate = entry.key === 'incoming' ? 1.13 : 1.04;
               message.pitch = 0.88;
               message.volume = this.settings.voice;
-              this.current = { ...entry, token, until: time + 7, started: false, message };
+              this.current = {
+                ...entry,
+                token,
+                until: time + 7,
+                started: false,
+                message
+              };
               this.radioState = 'queued';
               message.onstart = () => {
                 if (token !== this.serial || !this.current) return;
@@ -3413,7 +3823,11 @@
         land.computeVertexNormals();
         const terrainMesh = new THREE.Mesh(
           land,
-          new THREE.MeshStandardMaterial({ map: groundTexture, vertexColors: true, roughness: 1 })
+          new THREE.MeshStandardMaterial({
+            map: groundTexture,
+            vertexColors: true,
+            roughness: 1
+          })
         );
         terrainMesh.receiveShadow = true;
         scene.add(terrainMesh);
@@ -3424,11 +3838,13 @@
             depthWrite: false,
             uniforms: {
               sun: { value: new THREE.Vector3(-0.63, 0.21, -0.48).normalize() },
-              rugged: { value: 1 }
+              rugged: { value: 1 },
+              night: { value: 0 },
+              sunset: { value: 0 }
             },
             vertexShader:
               'varying vec3 localPos;void main(){localPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-            fragmentShader: `varying vec3 localPos;uniform vec3 sun;uniform float rugged;
+            fragmentShader: `varying vec3 localPos;uniform vec3 sun;uniform float rugged,night,sunset;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}
 float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p=p*2.03+7.1;a*=.5;}return v;}
@@ -3439,7 +3855,9 @@ col=mix(col,mix(vec3(.60,.69,.73),vec3(.94,.93,.86),fbm(p+3.)+.2),cloud*.88);
 vec3 dusk=mix(vec3(.17,.24,.26),vec3(.015,.07,.19),pow(h,.48));
 dusk=mix(dusk,mix(vec3(.06,.12,.22),vec3(.24,.36,.45),fbm(p+3.)),cloud*.82);
 dusk+=vec3(.9,.42,.12)*pow(light,38.)*.22+vec3(1.,.79,.5)*pow(light,2800.)*2.;
-gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
+col=mix(col,dusk,rugged); col=mix(col,col*vec3(1.15,.73,.50)+vec3(.08,.015,0.)*pow(1.-h,3.),sunset);
+col=mix(col,vec3(.012,.023,.052)+col*.10,night);float star=step(.9988,hash(floor(d.xz/max(d.y,.1)*420.)))*smoothstep(.12,.5,h);col+=star*night*.5;
+gl_FragColor=vec4(col,1.);}`
           })
         );
         const hemisphere = new THREE.HemisphereLight(0xa7ceda, 0x68472d, 1.6);
@@ -3576,7 +3994,14 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           }
         }
         for (let z = -1800; z < 1800; z += 530) {
-          registerBuilding({ x: -1450, z, w: 220, d: 175, h: 63, hangar: true });
+          registerBuilding({
+            x: -1450,
+            z,
+            w: 220,
+            d: 175,
+            h: 63,
+            hangar: true
+          });
           surface(-1150, z, 470, 32, materials.runway, 26.32);
         }
         registerBuilding({ x: 40, z: 1300, w: 75, d: 66, h: 117, tower: true });
@@ -4078,6 +4503,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             rust = standard(0xb86b4e, 0.68, 0.28),
             steel = standard(0x536d78, 0.62, 0.3),
             glass = standard(0x668d9d, 0.29, 0.65);
+          const windowLight = standard(0xcbd5b4, 0.35, 0.3);
+          windowLight.emissive.setHex(0xb5a779);
+          windowLight.emissiveIntensity = 0.6;
           const geometry = new THREE.PlaneGeometry(26000, 26000, 208, 208);
           earth.map = groundTexture;
           earth.bumpMap = groundTexture;
@@ -4104,6 +4532,24 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           const slab = (x, z, w, d, mat = asphalt, y = D.height(id, x, z) + 0.2) =>
             put(x, y, z, w, 0.3, d, mat, false);
           const runway = (x, z, length = 3200, width = 90, y = D.height(id, x, z) + 0.3) => {
+            const n = Math.floor(length / 80),
+              lights = new THREE.InstancedMesh(
+                unitBox,
+                new THREE.MeshBasicMaterial({
+                  color: 0x99e4e9,
+                  toneMapped: false
+                }),
+                n * 2
+              ),
+              pose = new THREE.Object3D();
+            for (let i = 0; i < n; i++)
+              for (let side = 0; side < 2; side++) {
+                pose.position.set(x + (side ? 1 : -1) * (width / 2 + 3), y + 1, z - length / 2 + 40 + i * 80);
+                pose.scale.set(2, 0.4, 3);
+                pose.updateMatrix();
+                lights.setMatrixAt(i * 2 + side, pose.matrix);
+              }
+            group.add(lights);
             slab(x, z, width + 28, length + 30, cement, y);
             slab(x, z, width, length, asphalt, y + 0.3);
             for (let side of [-1, 1]) slab(x + side * (width / 2 - 4), z, 1.5, length - 40, ivory, y + 0.6);
@@ -4181,7 +4627,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
                   put(xx, 12 + h / 2, z, 140 + rand() * 65, h, 170, rand() > 0.4 ? glass : steel);
                   put(xx, 14 + h, z, 160, 4, 175, ivory);
                   for (let floor = 20; floor < h; floor += 24)
-                    put(xx, 12 + floor, z, 145, 1.6, 176, cement, false);
+                    put(xx, 12 + floor, z, 145, 1.6, 176, windowLight, false);
                 }
             for (let z of [-1700, 0, 1700]) bridge(0, z, 840, 95);
             for (let side of [-1, 1]) slab(side * 300, 0, 70, 7400, asphalt);
@@ -4246,7 +4692,12 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
                   hub.add(blade);
                 }
                 group.add(hub);
-                rotors.push({ hub, center: hub.position.clone(), radius: r, angle: rand() * 6.28 });
+                rotors.push({
+                  hub,
+                  center: hub.position.clone(),
+                  radius: r,
+                  angle: rand() * 6.28
+                });
               }
             runway(-2900, 0, 2400, 65);
             bridge(-2800, -1600, 650, 100);
@@ -4313,11 +4764,31 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
 
         let steamClock = 0;
         const boxDefinitions = [
-          { c: { x: 0, y: 0, z: -0.3 }, h: { x: 1.15, y: 1.12, z: 5.6 }, angle: 0 },
-          { c: { x: 0, y: 0, z: -7.8 }, h: { x: 0.72, y: 0.7, z: 2.2 }, angle: 0 },
-          { c: { x: 0, y: 1.1, z: -3.7 }, h: { x: 0.67, y: 0.73, z: 1.8 }, angle: 0 },
-          { c: { x: -1.75, y: 2.1, z: 4.7 }, h: { x: 0.21, y: 1.5, z: 1.75 }, angle: 0 },
-          { c: { x: 1.75, y: 2.1, z: 4.7 }, h: { x: 0.21, y: 1.5, z: 1.75 }, angle: 0 }
+          {
+            c: { x: 0, y: 0, z: -0.3 },
+            h: { x: 1.15, y: 1.12, z: 5.6 },
+            angle: 0
+          },
+          {
+            c: { x: 0, y: 0, z: -7.8 },
+            h: { x: 0.72, y: 0.7, z: 2.2 },
+            angle: 0
+          },
+          {
+            c: { x: 0, y: 1.1, z: -3.7 },
+            h: { x: 0.67, y: 0.73, z: 1.8 },
+            angle: 0
+          },
+          {
+            c: { x: -1.75, y: 2.1, z: 4.7 },
+            h: { x: 0.21, y: 1.5, z: 1.75 },
+            angle: 0
+          },
+          {
+            c: { x: 1.75, y: 2.1, z: 4.7 },
+            h: { x: 0.21, y: 1.5, z: 1.75 },
+            angle: 0
+          }
         ];
         for (const s of [-1, 1]) {
           boxDefinitions.push({
@@ -4387,7 +4858,10 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
         });
         const nozzleMaterial = standard(0x59616b, 0.36, 0.86),
           nozzleInner = standard(0x151f2a, 0.72, 0.7);
-        const hotMaterial = new THREE.MeshBasicMaterial({ color: 0xffd9a3, toneMapped: false });
+        const hotMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffd9a3,
+          toneMapped: false
+        });
         const seamMaterial = new THREE.LineBasicMaterial({
           color: 0x394e62,
           transparent: true,
@@ -4631,7 +5105,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             }
             const light = new THREE.Mesh(
               new THREE.SphereGeometry(0.07, 8, 6),
-              new THREE.MeshBasicMaterial({ color: side < 0 ? 0xf6655b : 0x8addc9 })
+              new THREE.MeshBasicMaterial({
+                color: side < 0 ? 0xf6655b : 0x8addc9
+              })
             );
             light.position.set(side * 8, 0.24, 2.4);
             root.add(light);
@@ -4673,7 +5149,11 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           for (const b of hitboxes) {
             const mesh = new THREE.LineSegments(
               new THREE.EdgesGeometry(new THREE.BoxGeometry(b.h.x * 2, b.h.y * 2, b.h.z * 2)),
-              new THREE.LineBasicMaterial({ color: 0xf1c55f, transparent: true, opacity: 0.8 })
+              new THREE.LineBasicMaterial({
+                color: 0xf1c55f,
+                transparent: true,
+                opacity: 0.8
+              })
             );
             mesh.position.copy(b.c);
             mesh.quaternion.copy(b.q);
@@ -4721,7 +5201,10 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             this.p = new THREE.Vector3();
             this.q = new THREE.Quaternion();
             this.v = new THREE.Vector3();
-            this.previous = { p: new THREE.Vector3(), q: new THREE.Quaternion() };
+            this.previous = {
+              p: new THREE.Vector3(),
+              q: new THREE.Quaternion()
+            };
             this.current = { p: this.p, q: this.q };
             this.angular = { pitch: 0, roll: 0, yaw: 0 };
             this.flightSample = 0;
@@ -5101,7 +5584,11 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
         scene.add(tracers);
         const rocketMeshes = new THREE.InstancedMesh(
           new THREE.BoxGeometry(0.3, 0.3, 3.2),
-          new THREE.MeshStandardMaterial({ color: 0xddd9cd, metalness: 0.6, roughness: 0.35 }),
+          new THREE.MeshStandardMaterial({
+            color: 0xddd9cd,
+            metalness: 0.6,
+            roughness: 0.35
+          }),
           MAX_SHOTS
         );
         rocketMeshes.frustumCulled = false;
@@ -5134,7 +5621,11 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
         cannonGeometry.setDrawRange(0, 0);
         scene.add(cannonLines);
         const groundBox = [
-          { c: { x: 0, y: -0.65, z: 0 }, h: { x: 0.75, y: 1.3, z: 0.75 }, q: { x: 0, y: 0, z: 0, w: 1 } }
+          {
+            c: { x: 0, y: -0.65, z: 0 },
+            h: { x: 0.75, y: 1.3, z: 0.75 },
+            q: { x: 0, y: 0, z: 0, w: 1 }
+          }
         ];
         let railFlash = 0,
           railEnd = new THREE.Vector3();
@@ -5268,6 +5759,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           const shot = shots[index];
           shot.owner = null;
           shot.target = null;
+          shot.decoy = null;
           freeShots.push(shot);
           shots[index] = shots.at(-1);
           shots.pop();
@@ -5305,6 +5797,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           const shot = freeShots.pop();
           shot.owner = jet;
           shot.target = target;
+          shot.decoy = null;
+          shot.diverted = false;
+          shot.longrange = jet === player && selectedMissile === 'longrange';
           shot.age = 0;
           shot.born = true;
           shot.smokeTime = 0;
@@ -5316,7 +5811,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             .addScaledVector(up, -0.6);
           shot.v
             .copy(forward)
-            .multiplyScalar(jet === player ? 760 : 500)
+            .multiplyScalar(jet === player ? (shot.longrange ? 900 : 760) : 500)
             .add(jet.v);
           shot.last.copy(shot.p);
           shots.push(shot);
@@ -5359,11 +5854,13 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           }
           if (jet === player) {
             state.damage = 0.75;
+            state.shake = Math.max(state.shake, 0.8);
             ping(125, 0.14);
           }
           if (jet.hp > 0) return;
           jet.alive = false;
           jet.mesh.visible = false;
+          addDebris(jet.p);
           explosion(jet.p, true);
           if (jet === player)
             loseAirframe(
@@ -5372,6 +5869,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           else {
             if (attacker === player) {
               state.kills++;
+              reward('kill');
               $('kills').textContent = String(state.kills).padStart(2, '0');
               notice('SPLASH / ' + jet.name + ' DOWN', 2.5);
               feed(
@@ -5397,6 +5895,12 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           }
           if (state.mode !== 'playing' || !jet.alive || jet.flareCooldown > 0) return;
           jet.flareCooldown = 2.5;
+          // The cloud persists in simulation time; missiles entering it later can be captured.
+          jet.decoyUntil = state.time + 2;
+          jet.decoyPoint = jet.p
+            .clone()
+            .addScaledVector(RIGHT.clone().applyQuaternion(jet.q), 95)
+            .addScaledVector(jet.forward(), -65);
           const right = RIGHT.clone().applyQuaternion(jet.q),
             back = jet.forward().multiplyScalar(-1);
           for (let i = 0; i < 26; i++) {
@@ -5410,7 +5914,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           }
           let diverted = 0;
           for (const shot of shots)
-            if (shot.target === jet && shot.p.distanceToSquared(jet.p) < 750 * 750) {
+            if (shot.target === jet && shot.p.distanceToSquared(jet.p) < 1100 * 1100) {
+              shot.decoy = jet.decoyPoint.clone();
+              shot.diverted = true;
               shot.target = null;
               diverted++;
             }
@@ -5434,8 +5940,21 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
               continue;
             }
             // Guidance and thrust cease at burnout. Spent missiles retain momentum and fall.
-            const burning = shot.age < 3.5;
+            const burning = shot.age < (shot.longrange ? 5 : 3.5);
             if (!burning) shot.target = null;
+            if (
+              burning &&
+              shot.target &&
+              shot.target.decoyUntil > state.time &&
+              shot.p.distanceToSquared(shot.target.p) < 1100 * 1100
+            ) {
+              shot.decoy = shot.target.decoyPoint.clone();
+              shot.diverted = true;
+              shot.target = null;
+            }
+            if (burning && shot.decoy) {
+              shot.v.copy(C.guidedVelocity(shot.v, shot.decoy.clone().sub(shot.p), zero, dt, 12));
+            }
             if (shot.target) {
               if (!shot.target.alive) shot.target = null;
               else
@@ -5445,7 +5964,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
                     shot.target.p.clone().sub(shot.p),
                     shot.target.v,
                     dt,
-                    shot.owner === player ? 2.6 : 1.7
+                    shot.owner === player ? (shot.longrange ? 1.55 : 2.6) : 1.7
                   )
                 );
             }
@@ -5456,9 +5975,16 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             shot.last.copy(shot.p);
             shot.p.addScaledVector(shot.v, dt);
             shot.age += dt;
+            if (shot.decoy && C.proximityHit(shot.last, shot.p, shot.decoy, shot.decoy, 22) !== null) {
+              explosion(shot.p);
+              releaseShot(i);
+              continue;
+            }
             let target = null,
               jetT = null;
-            for (const aircraft of shot.owner === player ? enemies : [player]) {
+            for (const aircraft of shot.owner === player
+              ? enemies
+              : [player, ...(escort?.alive ? [escort] : [])]) {
               if (!aircraft.alive || aircraft.invulnerable > 0) continue;
               const contact = C.aircraftHit(
                 shot.last,
@@ -5468,7 +5994,10 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
                 hitboxes,
                 0.17
               );
-              let fuse = C.proximityHit(shot.last, shot.p, aircraft.previous.p, aircraft.current.p, 5);
+              // A decoyed seeker's aircraft proximity fuse is disarmed, but direct impacts still count.
+              let fuse = shot.diverted
+                ? null
+                : C.proximityHit(shot.last, shot.p, aircraft.previous.p, aircraft.current.p, 5);
               if (fuse !== null && worldHit(shot.last.clone().lerp(shot.p, fuse), aircraft.p) !== null)
                 fuse = null;
               const t = contact === null ? fuse : fuse === null ? contact : Math.min(contact, fuse);
@@ -5501,18 +6030,26 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             shot.smokeTime += dt;
             if (burning && shot.smokeTime >= 0.035) {
               smoke.emit(shot.p, zero, 2.3, 3.5, 0xd5dce1, 7, 0.63);
-              sparks.emit(shot.p, zero, 0.13, 6, 0xffc479, 1, 0.9);
+              sparks.emit(
+                shot.p,
+                zero,
+                0.22,
+                shot.owner === player ? 6 : 16,
+                shot.owner === player ? 0xffc479 : 0xff273b,
+                1,
+                1
+              );
               shot.smokeTime = 0;
             }
           }
         }
-        function renderProjectiles() {
-          shots.forEach((shot, i) => {
+        function renderProjectiles(renderShots = shots) {
+          renderShots.forEach((shot, i) => {
             const back = shot.p.clone().addScaledVector(shot.v, -0.014);
             shot.p.toArray(tracerPositions, i * 6);
             back.toArray(tracerPositions, i * 6 + 3);
             const color =
-              shot.age >= 3.5 ? [0.2, 0.25, 0.3] : shot.owner === player ? [1, 0.85, 0.58] : [1, 0.42, 0.24];
+              shot.age >= 3.5 ? [0.2, 0.25, 0.3] : shot.owner === player ? [1, 0.85, 0.58] : [3, 0.035, 0.08];
             tracerColors.set(color, i * 6);
             tracerColors.set(
               color.map((c) => c * 0.12),
@@ -5524,10 +6061,10 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             dummy.updateMatrix();
             rocketMeshes.setMatrixAt(i, dummy.matrix);
           });
-          tracerGeometry.setDrawRange(0, shots.length * 2);
+          tracerGeometry.setDrawRange(0, renderShots.length * 2);
           tracerGeometry.attributes.position.needsUpdate = true;
           tracerGeometry.attributes.color.needsUpdate = true;
-          rocketMeshes.count = shots.length;
+          rocketMeshes.count = renderShots.length;
           rocketMeshes.instanceMatrix.needsUpdate = true;
         }
         function resetJet(jet) {
@@ -5546,6 +6083,8 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           jet.throttle = (140 - 75) / 225;
           jet.launcher = C.makeLauncher();
           jet.flareCooldown = 0;
+          jet.decoyUntil = 0;
+          jet.decoyPoint = null;
           jet.lock = { target: null, progress: 0, locked: false };
           jet.q.identity();
           jet.v.set(0, 0, -140);
@@ -5559,6 +6098,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           e.slot = slot;
           e.serial = ++enemySerial;
           e.name = callsigns[slot] + ' ' + String(e.serial).padStart(2, '0');
+          e.personality = ['aggressive', 'defensive', 'sniper'][slot % 3];
           e.color = contactColors[slot];
           resetJet(e);
           const formation = [
@@ -5660,6 +6200,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           spawnEnemy(0, true);
           const rival = enemies[0];
           rival.name = callsigns[(state.series.round - 1) % callsigns.length] + ' / AI';
+          rival.personality = ['aggressive', 'defensive', 'sniper'][(state.series.round - 1) % 3];
           rival.color = '#efa58e';
           rival.p.copy(player.p).add(new THREE.Vector3(0, 0, -1800));
           const level = Math.max(player.p.y, terrainHeight(rival.p.x, rival.p.z) + 300);
@@ -5756,6 +6297,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           const lead = C.interceptTime(relative, player.v.clone().sub(e.v), D.CANNON.speed) || 0;
           const aim = relative.clone().addScaledVector(player.v.clone().sub(e.v), Math.min(lead, 1));
           let desired = aim.clone().normalize();
+          if (e.personality === 'sniper' && distance > 280) desired.addScaledVector(UP, 0.12);
+          if (e.personality === 'defensive' && distance < 350)
+            desired.addScaledVector(RIGHT.clone().applyQuaternion(e.q), e.breakSide * 0.4);
           e.intent = 'INTERCEPT';
           if (
             distance < 100 ||
@@ -5791,8 +6335,12 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           }
           if (distance > 2200) desired.copy(relative).normalize();
           desired.normalize();
-          const pilot = C.assistedInput(e.q, desired, { pitch: 0, roll: 0, yaw: 0 }),
-            targetSpeed = state.difficulty === 'ace' ? 151 : 138;
+          const pilot = C.assistedInput(e.q, desired, {
+              pitch: 0,
+              roll: 0,
+              yaw: 0
+            }),
+            targetSpeed = state.difficulty === 'ace' ? 151 : state.difficulty === 'rookie' ? 128 : 138;
           e.gear = distance < 320 && e.speed > 170;
           e.gearTravel += (Number(e.gear) - e.gearTravel) * Math.min(1, dt * 4);
           pilot.gear = e.gear;
@@ -5811,7 +6359,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             state.difficulty !== 'practice' &&
             firing &&
             e.age > 2.5 &&
-            (state.difficulty === 'ace' || e.age % 2.2 < 0.85)
+            (state.difficulty === 'ace' ||
+              e.age % 2.2 <
+                (state.difficulty === 'rookie' ? 0.35 : state.difficulty === 'veteran' ? 1.2 : 0.85))
           )
             fireCannon(e);
           if (Math.hypot(e.p.x, e.p.z) > 12500 || e.p.y > 6500) damage(e, 1000, null, e.p);
@@ -5867,6 +6417,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           }
         }
         function launch() {
+          if ($('mission-type').value === 'campaign') $('arena').value = X.missions[campaignIndex].arena;
           setTheater();
           audioStart();
           battleSound.reset();
@@ -5914,13 +6465,15 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             gates: 0,
             flares: 0,
             enemyCount:
-              $('mission-type').value === 'duel'
-                ? 1
-                : $('mission-type').value === 'laststand'
-                  ? 3
-                  : $('mission-type').value === 'familiarisation'
-                    ? 0
-                    : Number($('contacts').value)
+              $('mission-type').value === 'campaign'
+                ? X.missions[campaignIndex].count
+                : $('mission-type').value === 'duel'
+                  ? 1
+                  : $('mission-type').value === 'laststand'
+                    ? 3
+                    : $('mission-type').value === 'familiarisation'
+                      ? 0
+                      : Number($('contacts').value)
           });
           for (const g of gates) g.passed = false;
           $('kill-feed').replaceChildren();
@@ -5932,6 +6485,8 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           player.sync();
           for (let i = 0; i < state.enemyCount; i++) spawnEnemy(i, true);
           if (state.missionMode === 'duel') prepareDuelRound();
+          resetExpedition();
+          if (campaign?.type === 'boss') state.difficulty = 'ace';
           $('duel-score').hidden = state.missionMode !== 'duel';
           $('ground-banner').hidden = true;
           document.body.classList.toggle('duel-mode', state.missionMode === 'duel');
@@ -5987,6 +6542,11 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             4
           );
           if (cannonMode()) notice('CLOSE TO 500 M / HOLD SPACE OR CLICK · G FOR LANDING GEAR', 4);
+          if (campaign) {
+            $('phase-label').textContent = campaign.name.toUpperCase();
+            $('phase-message').textContent = campaign.text;
+            $('mode-label').textContent = 'CAMPAIGN / ' + (campaign.index + 1) + ' OF 6';
+          }
           worldCanvas.focus();
           captureMouse();
           updateTelemetry();
@@ -6018,6 +6578,12 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           updateTelemetry();
         }
         function hangar() {
+          for (const item of [...pickups, ...groundTargets, ...bombs, ...debris]) scene.remove(item.mesh);
+          pickups.length = groundTargets.length = bombs.length = debris.length = 0;
+          if (escort) scene.remove(escort.mesh);
+          escort = null;
+          campaign = null;
+          shockRing.visible = false;
           state.grounded = false;
           $('ground-banner').hidden = true;
           $('duel-score').hidden = true;
@@ -6054,6 +6620,13 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
         }
         function endMatch(reason, outcome = 'defeat') {
           if (!['playing', 'respawning'].includes(state.mode)) return;
+          if (outcome === 'victory') {
+            reward('win');
+            if (campaign) {
+              career.campaign = Math.max(career.campaign, campaign.index + 1);
+              saveCareer();
+            }
+          }
           state.mode = 'ended';
           $('ground-banner').hidden = true;
           stopBattleAudio();
@@ -6127,7 +6700,10 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           player.mesh.visible = false;
           clearShots();
           C.lockStep(seeker, null, false, 0);
-          if (state.missionMode === 'operation' && state.deaths >= state.lives) {
+          if (
+            (state.missionMode === 'operation' || state.missionMode === 'campaign') &&
+            state.deaths >= state.lives
+          ) {
             endMatch(reason);
             return;
           }
@@ -6146,6 +6722,11 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           state.boundary = 0;
           state.damage = 0;
           for (let i = 0; i < state.enemyCount; i++) spawnEnemy(i, true);
+          if (campaign?.type === 'boss') {
+            enemies[0].hp = 300;
+            enemies[0].name = 'SABLE / ACE';
+            enemies[0].personality = 'sniper';
+          }
           updateCamera(0, true);
         }
         function updatePhase(dt) {
@@ -6195,6 +6776,8 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
                 : 'FREE HUNT / NO CLOCK · UNLIMITED REDEPLOYMENTS',
             3
           );
+          if (campaign)
+            notice(campaign.name.toUpperCase() + ' / ' + campaign.type.toUpperCase() + ' / 3 AIRFRAMES', 3);
         }
         function control(code) {
           return keys.has(code) || touchKeys.has(code);
@@ -6318,7 +6901,8 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           e.decision -= dt;
           e.flareCooldown = Math.max(0, e.flareCooldown - dt);
           C.updateLauncher(e.launcher, dt);
-          const delta = player.p.clone().sub(e.p),
+          const victim = escort?.alive && e.slot % 2 === 0 ? escort : player;
+          const delta = victim.p.clone().sub(e.p),
             distance = delta.length(),
             old = e.forward();
           if (e.decision <= 0) {
@@ -6330,7 +6914,14 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
               e.evade = 2.1;
               e.evadeCooldown = 4;
               e.breakSide *= -1;
-              if (state.difficulty === 'ace' && e.flareCooldown === 0 && random() < 0.3) deployFlares(e);
+              if (
+                (state.difficulty === 'ace' ||
+                  state.difficulty === 'veteran' ||
+                  e.personality === 'defensive') &&
+                e.flareCooldown === 0 &&
+                random() < 0.5
+              )
+                deployFlares(e);
             }
           }
           let desired;
@@ -6358,7 +6949,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
                   )
                 );
             desired = anchor.sub(e.p).normalize();
-          } else if (distance < 340) {
+          } else if (
+            distance < (e.personality === 'sniper' ? 850 : e.personality === 'aggressive' ? 230 : 440)
+          ) {
             e.intent = 'EXTEND';
             desired = e.p
               .clone()
@@ -6367,7 +6960,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
               .normalize();
           } else {
             e.intent = 'ATTACK';
-            desired = delta.addScaledVector(player.v, Math.min(distance / 850, 0.7)).normalize();
+            desired = delta
+              .addScaledVector(victim.v, Math.min(distance / 850, e.personality === 'sniper' ? 1.2 : 0.7))
+              .normalize();
             if (distance > 950) desired.y += Math.sin(e.age * 0.5 + e.phase) * 0.1;
           }
           for (const other of enemies)
@@ -6421,7 +7016,11 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
               : state.difficulty === 'ace'
                 ? 160
                 : 137 + Math.sin(e.age * 0.4 + e.slot) * 12;
-          const pilot = C.assistedInput(e.q, desired, { pitch: 0, roll: 0, yaw: 0 });
+          const pilot = C.assistedInput(e.q, desired, {
+            pitch: 0,
+            roll: 0,
+            yaw: 0
+          });
           // AI shares the player's engine, energy loss and turn envelope. It cannot
           // instantaneously rotate its velocity vector while evading a missile.
           e.throttle = clamp((targetSpeed - 75) / 225 + (targetSpeed - e.speed) * 0.012, 0.12, 1);
@@ -6431,24 +7030,33 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             damage(e, 1000, null, e.p);
             return;
           }
-          const aim = player.p.clone().sub(e.p).normalize();
+          const aim = victim.p.clone().sub(e.p).normalize();
           const canAim =
-            player.invulnerable <= 0 &&
+            victim.invulnerable <= 0 &&
             state.difficulty !== 'practice' &&
             e.age > 7 &&
             distance > 250 &&
             distance < 1800 &&
             e.forward().dot(aim) > 0.94 &&
-            worldHit(e.p, player.p) === null;
-          C.lockStep(e.lock, player, canAim, dt);
-          const incoming = shots.filter((s) => s.target === player).length;
+            worldHit(e.p, victim.p) === null;
+          C.lockStep(e.lock, victim, canAim, dt);
+          const incoming = shots.filter((s) => s.target === victim).length;
           if (
             e.lock.locked &&
             state.time >= e.nextAttack &&
             incoming < (state.difficulty === 'ace' ? 3 : 2)
           ) {
-            if (fireMissile(e, player))
-              e.nextAttack = state.time + (state.difficulty === 'ace' ? 6 : 10) + e.slot * 0.35;
+            if (fireMissile(e, victim))
+              e.nextAttack =
+                state.time +
+                (state.difficulty === 'ace'
+                  ? 6
+                  : state.difficulty === 'rookie'
+                    ? 15
+                    : state.difficulty === 'veteran'
+                      ? 8
+                      : 10) +
+                e.slot * 0.35;
           }
           if (distance > 7800) {
             e.alive = false;
@@ -6584,7 +7192,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
               project(e.p),
               aimScreen(),
               lookSettings.assist ? C.assistedScopeRadius(scopeRadius(), seeker.target === e) : scopeRadius(),
-              e.p.distanceTo(player.p),
+              e.p.distanceTo(player.p) / (selectedMissile === 'longrange' ? 1.5 : 1),
               true
             )
           )
@@ -6615,7 +7223,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           }
         }
         function label(text, x, y, size = 11, color = '#e8f0ee', align = 'left') {
-          ctx.font = '600 ' + size + 'px Arial, sans-serif';
+          ctx.font = '600 ' + size * fx.scale + 'px Arial, sans-serif';
           ctx.textAlign = align;
           ctx.fillStyle = color;
           ctx.shadowColor = '#071b29';
@@ -6760,7 +7368,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           if (state.mode === 'menu') return;
           const small = width < 650,
             cx = width / 2,
-            white = '#e8f0ee',
+            white = themeColors[fx.color],
             labels = [];
           if (state.missionMode === 'familiarisation') {
             const aim = aimScreen();
@@ -6975,7 +7583,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             9,
             '#cbdcd8'
           );
-          const incoming = shots.filter((s) => s.target === player && s.owner !== player);
+          const incoming = [];
           if (incoming.length) {
             const nearest = Math.min(...incoming.map((s) => s.p.distanceTo(player.p)));
             label(
@@ -7011,7 +7619,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             '#cfdee0',
             'center'
           );
-          label(Math.round(fps) + ' FPS', width - 20, height - 17, 8, '#d5e5dc88', 'right');
+          if (fx.fps) label(Math.round(fps) + ' FPS', width - 20, height - 17, 8, '#d5e5dc88', 'right');
           $('contact-count').textContent =
             enemies.filter((e) => e.alive).length +
             ' CONTACTS / ' +
@@ -7074,8 +7682,8 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
                 ? seeker.locked
                   ? 'LOCK CONFIRMED'
                   : 'ACQUIRING ' + Math.floor(seeker.progress * 100) + '%'
-                : enemy.intent;
-            marker.hp.style.width = enemy.hp + '%';
+                : (enemy.personality || 'pilot').toUpperCase() + ' / ' + enemy.intent;
+            marker.hp.style.width = Math.min(100, enemy.hp / (enemy.name === 'SABLE / ACE' ? 3 : 1)) + '%';
             let offset = 0;
             while (
               used.some(
@@ -7153,6 +7761,13 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           $('kills').textContent = String(
             state.missionMode === 'familiarisation' ? state.gates : state.kills
           ).padStart(2, '0');
+          if (campaign) {
+            const seconds = Math.max(0, Math.ceil(campaign.duration - campaign.elapsed));
+            $('mission-clock').textContent =
+              Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
+            $('mission-progress').textContent =
+              'MISSION ' + (campaign.index + 1) + ' / 6 · ' + Math.max(0, 3 - state.deaths) + ' LIVES';
+          }
         }
         function drawFlightDirector() {
           if (state.grounded) return;
@@ -7372,7 +7987,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
                 ? Math.max(0, Math.ceil(state.grounded ? state.groundTime : 120 - state.time)) + 's'
                 : state.missionMode === 'operation'
                   ? Math.max(0, Math.ceil(state.duration - state.time)) + 's'
-                  : 'unlimited') +
+                  : campaign
+                    ? Math.max(0, Math.ceil(campaign.duration - campaign.elapsed)) + 's'
+                    : 'unlimited') +
             '. Phase countdown: ' +
             state.countdown.toFixed(1) +
             's. Load: ' +
@@ -7476,9 +8093,8 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
                 );
               }
             }
-          if (shots.some((s) => s.target === player) && state.time - lastWarning > 0.8) {
+          if (shots.some((s) => s.target === player) && state.time - lastWarning > 4) {
             lastWarning = state.time;
-            ping(420, 0.09);
             radioCue('incoming');
           }
           if (state.notice > 0) {
@@ -7520,6 +8136,7 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             let iterations = 0;
             while (accumulator >= FIXED && iterations < 12 && state.mode === 'playing') {
               step(FIXED);
+              if (state.mode === 'playing') expeditionStep(FIXED);
               sparks.update(FIXED);
               smoke.update(FIXED);
               accumulator -= FIXED;
@@ -7571,9 +8188,11 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           railGlow.color.set(state.railCooldown > 0 ? 0xc87b58 : 0x9ef2e2);
           sparks.render();
           smoke.render();
-          renderer.render(scene, camera);
+          environmentFrame(state.mode === 'playing' ? dt : 0);
+          renderScene();
           drawHUD();
           drawFlightDirector();
+          drawExpedition(dt);
           updateTargetMarkers();
           updateMissionHUD();
           battleSound.tick(
@@ -7599,12 +8218,778 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
             fps = (frames * 1000) / (now - fpsTime);
             fpsTime = now;
             frames = 0;
+            if (fx.auto && state.mode === 'playing' && !document.hidden && $('quality').value === 'high') {
+              lowFrames = fps < 35 ? lowFrames + 1 : 0;
+              if (lowFrames >= 6) {
+                $('quality').value = 'performance';
+                $('pause-quality').value = 'performance';
+                resize();
+                notice('PERFORMANCE MODE / STABLE FLIGHT PRIORITISED');
+                lowFrames = 0;
+              }
+            }
           }
           telemetryClock += dt;
           if (telemetryClock > 0.12) {
             telemetryClock = 0;
             updateTelemetry();
           }
+        }
+        // Expedition systems share the fixed simulation and never advance while paused.
+        const X = ExpeditionCore;
+        let career;
+        try {
+          career = X.profile(JSON.parse(localStorage.getItem('skybreak-career')));
+        } catch {
+          career = X.profile(null);
+        }
+        let campaignIndex = Math.min(5, career.campaign),
+          campaign = null,
+          escort = null;
+        const groundTargets = [],
+          bombs = [],
+          pickups = [];
+        let threatTone = 0,
+          fxTime = 0;
+        let boostTime = 0,
+          boostCooldown = 0,
+          bombCooldown = 0,
+          lowFrames = 0;
+        let activeWeather = 'clear',
+          selectedMissile = 'standard';
+        const themeColors = {
+          cyan: '#a9ece7',
+          green: '#bbefaa',
+          amber: '#ffd58e'
+        };
+        const fx = {
+          style: 'glass',
+          color: 'cyan',
+          scale: 1,
+          accessible: false,
+          auto: true,
+          post: true,
+          fps: true
+        };
+        try {
+          const p = JSON.parse(localStorage.getItem('skybreak-display'));
+          if (p) {
+            for (const k of ['accessible', 'auto', 'post', 'fps'])
+              if (typeof p[k] === 'boolean') fx[k] = p[k];
+            if (themeColors[p.color]) fx.color = p.color;
+            if (['glass', 'minimal', 'classic'].includes(p.style)) fx.style = p.style;
+            if (Number.isFinite(p.scale)) fx.scale = clamp(p.scale, 0.8, 1.3);
+          }
+        } catch {}
+        const skinColors = [0xb0bdc9, 0xc6ad83, 0x354c60];
+        const reconPod = new THREE.Mesh(new THREE.SphereGeometry(0.48, 12, 8), standard(0x253b42, 0.3, 0.7));
+        reconPod.scale.set(1, 0.7, 3);
+        reconPod.position.set(0, -1, -3);
+        player.mesh.add(reconPod);
+        const spectralStripe = new THREE.Mesh(
+          new THREE.BoxGeometry(0.1, 0.12, 7),
+          standard(0xd3a369, 0.4, 0.5)
+        );
+        spectralStripe.position.set(0, 1, -2);
+        player.mesh.add(spectralStripe);
+        const postTarget = new THREE.WebGLRenderTarget(1, 1, {
+          depthBuffer: true
+        });
+        const postScene = new THREE.Scene(),
+          postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const postMaterial = new THREE.ShaderMaterial({
+          depthTest: false,
+          depthWrite: false,
+          uniforms: {
+            map: { value: postTarget.texture },
+            pixel: { value: new THREE.Vector2(1, 1) },
+            bloom: { value: 0.18 },
+            speed: { value: 0 },
+            heat: { value: 0 },
+            time: { value: 0 },
+            tint: { value: new THREE.Vector3(1, 1, 1) },
+            night: { value: 0 }
+          },
+          vertexShader: 'varying vec2 uv0;void main(){uv0=uv;gl_Position=vec4(position.xy,0.,1.);}',
+          fragmentShader: `uniform sampler2D map; uniform vec2 pixel; uniform float bloom,speed,heat,time,night; uniform vec3 tint; varying vec2 uv0;
+            void main(){vec2 u=uv0; float plume=exp(-pow((u.x-.5)*16.,2.)-pow((u.y-.30)*12.,2.));
+              u.x+=sin(u.y*150.+time*28.)*.0012*heat*plume;
+              vec3 c=texture2D(map,u).rgb, glow=vec3(0.); vec2 radial=(u-.5)*speed*.006;
+              for(int i=1;i<=4;i++){float n=float(i);c+=texture2D(map,u-radial*n).rgb*.12;
+                vec3 a=texture2D(map,u+pixel*vec2(n*2.,0.)).rgb;vec3 b=texture2D(map,u-pixel*vec2(n*2.,0.)).rgb;
+                vec3 d=texture2D(map,u+pixel*vec2(0.,n*2.)).rgb;vec3 e=texture2D(map,u-pixel*vec2(0.,n*2.)).rgb;
+                glow+=max(a-.78,0.)+max(b-.78,0.)+max(d-.78,0.)+max(e-.78,0.);}
+              c=c/1.48+glow*bloom*.32; c*=tint; c=mix(c,c*vec3(.23,.35,.55),night);
+              c*=1.-.18*smoothstep(.2,.75,length(uv0-.5)); gl_FragColor=vec4(c,1.);
+              #include <colorspace_fragment>
+            }`
+        });
+        postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), postMaterial));
+        const rainPositions = new Float32Array(900 * 6),
+          rainGeometry = new THREE.BufferGeometry();
+        rainGeometry.setAttribute('position', new THREE.BufferAttribute(rainPositions, 3));
+        const rain = new THREE.LineSegments(
+          rainGeometry,
+          new THREE.LineBasicMaterial({
+            color: 0xaac9de,
+            transparent: true,
+            opacity: 0.25,
+            depthWrite: false
+          })
+        );
+        rain.frustumCulled = false;
+        scene.add(rain);
+        const pickupGeometry = new THREE.OctahedronGeometry(12),
+          pickupMaterials = [
+            new THREE.MeshBasicMaterial({
+              color: 0x72ffbc,
+              wireframe: true,
+              toneMapped: false
+            }),
+            new THREE.MeshBasicMaterial({
+              color: 0xffd687,
+              wireframe: true,
+              toneMapped: false
+            })
+          ];
+        const bombGeometry = new THREE.SphereGeometry(1.1, 8, 6),
+          bombMaterial = standard(0x333c41);
+        const targetGeometry = new THREE.BoxGeometry(30, 24, 30),
+          targetMaterial = standard(0x675d50);
+        const debris = [],
+          debrisGeometry = new THREE.TetrahedronGeometry(1.2),
+          debrisMaterial = standard(0x6d7e87, 0.6, 0.5);
+        const shockRing = new THREE.Mesh(
+          new THREE.RingGeometry(1, 1.08, 48),
+          new THREE.MeshBasicMaterial({
+            color: 0xd8f4ff,
+            transparent: true,
+            opacity: 0,
+            side: THREE.DoubleSide,
+            depthWrite: false
+          })
+        );
+        scene.add(shockRing);
+        let shockTime = 0,
+          wasSupersonic = false;
+        const hangarBay = new THREE.Group();
+        scene.add(hangarBay);
+        const bayMaterial = standard(0x26333c, 0.76, 0.3),
+          bayLight = new THREE.MeshBasicMaterial({
+            color: 0xaee7ed,
+            toneMapped: false
+          });
+        box(hangarBay, 120, 1, 120, bayMaterial, 0, -5, 0);
+        box(hangarBay, 120, 45, 1, bayMaterial, 0, 17, -52);
+        box(hangarBay, 1, 45, 105, bayMaterial, -55, 17, 0);
+        for (let i = -2; i <= 2; i++) {
+          box(hangarBay, 1, 1, 100, bayLight, i * 20, -4.45, 0);
+          box(hangarBay, 1, 33, 1, bayLight, i * 20, 17, -51.4);
+        }
+        function addDebris(p) {
+          for (let i = 0; i < 10; i++) {
+            if (debris.length >= 50) {
+              scene.remove(debris[0].mesh);
+              debris.shift();
+            }
+            const mesh = new THREE.Mesh(debrisGeometry, debrisMaterial);
+            mesh.position.copy(p);
+            mesh.scale.set(1 + random() * 3, 0.2 + random(), 1 + random() * 2);
+            scene.add(mesh);
+            debris.push({
+              mesh,
+              v: new THREE.Vector3((random() - 0.5) * 95, random() * 60, (random() - 0.5) * 95),
+              life: 3
+            });
+          }
+        }
+        function saveCareer() {
+          try {
+            localStorage.setItem('skybreak-career', JSON.stringify(career));
+          } catch {}
+          refreshCareer();
+        }
+        function reward(event) {
+          career = X.profile(career);
+          const value = X.award(career, event);
+          career.best = Math.max(career.best, state.kills);
+          saveCareer();
+          return value;
+        }
+        function refreshCareer() {
+          $('career-line').textContent =
+            'PILOT LEVEL ' +
+            (1 + Math.floor(career.xp / 500)) +
+            ' / ' +
+            career.xp +
+            ' XP · ' +
+            career.kills +
+            ' KILLS · ' +
+            career.wins +
+            ' VICTORIES';
+          $('challenge-line').textContent =
+            'DAILY / ' +
+            career.daily +
+            ' OF 5 KILLS · ' +
+            (career.dailyClaimed ? '300 XP CLAIMED' : '300 BONUS XP') +
+            ' · BEST SORTIE ' +
+            career.best;
+          for (const [id, kind] of [
+            ['airframe-choice', 'airframe'],
+            ['skin-choice', 'skin']
+          ]) {
+            for (const option of $(id).options)
+              option.disabled = !X.unlocked(career.xp, kind, Number(option.value));
+            if (!X.unlocked(career.xp, kind, career[kind])) career[kind] = 0;
+            $(id).value = String(career[kind]);
+          }
+          $('mission-map').replaceChildren();
+          X.missions.forEach((m, i) => {
+            const b = document.createElement('button');
+            b.textContent = String(i + 1).padStart(2, '0');
+            b.title = m.name;
+            b.setAttribute('aria-label', 'Mission ' + (i + 1) + ': ' + m.name);
+            b.disabled = i > career.campaign;
+            b.setAttribute('aria-pressed', String(i === campaignIndex));
+            b.onclick = () => {
+              campaignIndex = i;
+              refreshCareer();
+              if (state.mode === 'menu') $('mission-type').onchange();
+            };
+            $('mission-map').append(b);
+          });
+          const m = X.missions[campaignIndex];
+          $('campaign-copy').textContent = m.name.toUpperCase() + ' / ' + m.text;
+          materials.skin.color.setHex(skinColors[career.skin]);
+          reconPod.visible = career.airframe === 1;
+          spectralStripe.visible = career.airframe === 2;
+          document.querySelector('.aircraft-caption > b').textContent = ['SF–29', 'SF–29R', 'SF–29E'][
+            career.airframe
+          ];
+        }
+        function applyDisplay() {
+          document.body.dataset.hud = fx.style;
+          document.documentElement.style.setProperty('--avionics', themeColors[fx.color]);
+          document.documentElement.style.setProperty('--hud-scale', fx.scale);
+          try {
+            localStorage.setItem('skybreak-display', JSON.stringify(fx));
+          } catch {}
+        }
+        for (const [id, key] of [
+          ['hud-style', 'style'],
+          ['hud-color', 'color'],
+          ['hud-size', 'scale'],
+          ['accessible-color', 'accessible'],
+          ['auto-quality', 'auto'],
+          ['post-effects', 'post'],
+          ['show-fps', 'fps']
+        ]) {
+          const el = $(id);
+          if (el.type === 'checkbox') el.checked = fx[key];
+          else el.value = fx[key];
+          el.onchange = () => {
+            fx[key] = el.type === 'checkbox' ? el.checked : el.type === 'range' ? Number(el.value) : el.value;
+            applyDisplay();
+          };
+        }
+        for (const [id, key] of [
+          ['airframe-choice', 'airframe'],
+          ['skin-choice', 'skin']
+        ])
+          $(id).onchange = () => {
+            const index = Number($(id).value);
+            if (X.unlocked(career.xp, key, index)) career[key] = index;
+            saveCareer();
+          };
+        applyDisplay();
+        refreshCareer();
+        function resetExpedition() {
+          boostTime = boostCooldown = bombCooldown = 0;
+          threatTone = 0;
+          for (const d of debris) scene.remove(d.mesh);
+          debris.length = 0;
+          shockTime = 0;
+          wasSupersonic = false;
+          for (const p of [...pickups, ...groundTargets, ...bombs]) scene.remove(p.mesh);
+          pickups.length = groundTargets.length = bombs.length = 0;
+          if (escort) scene.remove(escort.mesh);
+          escort = null;
+          campaign =
+            state.missionMode === 'campaign'
+              ? {
+                  ...X.missions[campaignIndex],
+                  index: campaignIndex,
+                  elapsed: 0,
+                  destroyed: 0
+                }
+              : null;
+          activeWeather = campaign ? campaign.weather : $('weather-choice').value;
+          selectedMissile = $('weapon-choice').value;
+          if (campaign?.type === 'escort') {
+            escort = new Aircraft();
+            escort.name = 'BLUEBIRD';
+            escort.p.copy(player.p).add(new THREE.Vector3(120, 40, -380));
+            escort.q.copy(player.q);
+            escort.speed = 95;
+            escort.v.set(0, 0, -95);
+            escort.hp = 100;
+            escort.snapshot();
+            escort.sync();
+          }
+          if (campaign?.type === 'strike')
+            for (let i = 0; i < 3; i++) {
+              const p = new THREE.Vector3(-100 + i * 260, 0, 300 - i * 1300);
+              p.y = obstacleHeight(p.x, p.z) + 12;
+              const mesh = new THREE.Mesh(targetGeometry, targetMaterial);
+              mesh.position.copy(p);
+              scene.add(mesh);
+              const aerial = new THREE.Mesh(new THREE.ConeGeometry(5, 38, 6), materials.stripe);
+              aerial.position.y = 29;
+              mesh.add(aerial);
+              groundTargets.push({ p, mesh, alive: true });
+            }
+          if (campaign?.type === 'boss') {
+            enemies[0].hp = 300;
+            enemies[0].name = 'SABLE / ACE';
+            enemies[0].personality = 'sniper';
+          }
+          if (!cannonMode() && state.missionMode !== 'familiarisation')
+            for (let i = 0; i < 4; i++) {
+              const mesh = new THREE.Mesh(pickupGeometry, pickupMaterials[i % 2]);
+              mesh.position
+                .copy(player.p)
+                .add(new THREE.Vector3((i % 2 ? 1 : -1) * (250 + i * 150), 80, -700 - i * 800));
+              mesh.position.y = Math.max(
+                mesh.position.y,
+                obstacleHeight(mesh.position.x, mesh.position.z) + 160
+              );
+              scene.add(mesh);
+              pickups.push({ mesh, kind: i % 2, cooldown: 0 });
+            }
+          $('campaign-status').hidden = !campaign;
+          $('touch-bomb').hidden = campaign?.type !== 'strike';
+          $('touch-boost').hidden = cannonMode();
+        }
+        function useBoost() {
+          if (state.mode !== 'playing' || state.grounded || boostCooldown > 0 || cannonMode()) return;
+          boostTime = 3;
+          boostCooldown = 12;
+          notice('AFTERBURNER / 3 SECOND BURST');
+        }
+        function releaseBomb() {
+          if (state.mode !== 'playing' || campaign?.type !== 'strike' || bombCooldown > 0) return;
+          const mesh = new THREE.Mesh(bombGeometry, bombMaterial);
+          mesh.position.copy(player.p).add(new THREE.Vector3(0, -3, 0));
+          scene.add(mesh);
+          bombs.push({ mesh, v: player.v.clone() });
+          bombCooldown = 2;
+          notice('BOMB AWAY / 2 SEC REARM');
+        }
+        function expeditionStep(dt) {
+          boostCooldown = Math.max(0, boostCooldown - dt);
+          boostTime = Math.max(0, boostTime - dt);
+          bombCooldown = Math.max(0, bombCooldown - dt);
+          if (boostTime > 0 && player.alive && !cannonMode()) {
+            player.v.addScaledVector(player.forward(), 34 * dt);
+            player.v.clampLength(0, 360);
+            player.speed = player.v.length();
+          }
+          for (let i = debris.length - 1; i >= 0; i--) {
+            const d = debris[i];
+            d.life -= dt;
+            d.v.y -= 9.81 * dt;
+            d.mesh.position.addScaledVector(d.v, dt);
+            d.mesh.rotation.x += dt * 3;
+            d.mesh.rotation.z += dt * 2;
+            if (d.life <= 0) {
+              scene.remove(d.mesh);
+              debris.splice(i, 1);
+            }
+          }
+          if (player.speed > 343 && !wasSupersonic) {
+            shockTime = 0.7;
+            shockRing.position.copy(player.p);
+            shockRing.quaternion.copy(player.q);
+            spatialTone(70, 0.25, player.p);
+          }
+          wasSupersonic = player.speed > 343;
+          shockTime = Math.max(0, shockTime - dt);
+          shockRing.visible = shockTime > 0;
+          shockRing.scale.setScalar(5 + (1 - shockTime / 0.7) * 100);
+          shockRing.material.opacity = shockTime * 0.3;
+          for (const p of pickups) {
+            p.cooldown = Math.max(0, p.cooldown - dt);
+            p.mesh.visible = p.cooldown === 0;
+            p.mesh.rotation.y += dt;
+            if (p.cooldown === 0 && player.alive && p.mesh.position.distanceTo(player.p) < 55) {
+              p.cooldown = 35;
+              if (p.kind === 0) {
+                player.hp = Math.min(100, player.hp + 35);
+                notice('FIELD REPAIR / +35 HEALTH');
+              } else {
+                player.launcher.reload = 0;
+                player.flareCooldown = 0;
+                boostCooldown = 0;
+                notice('RESUPPLY / MISSILE, FLARES & BOOST READY');
+              }
+              ping(720, 0.1);
+            }
+          }
+          if (campaign) {
+            campaign.elapsed += dt;
+            if (escort?.alive) {
+              escort.snapshot();
+              const angle = campaign.elapsed * 0.045;
+              const destination = new THREE.Vector3(
+                Math.sin(angle) * 2000,
+                580,
+                Math.cos(angle) * 2000 - 800
+              );
+              const direction = destination.sub(escort.p).normalize();
+              escort.q.setFromUnitVectors(FORWARD, direction);
+              escort.v.copy(direction).multiplyScalar(95);
+              escort.p.addScaledVector(escort.v, dt);
+              escort.sync();
+            }
+            for (let i = bombs.length - 1; i >= 0; i--) {
+              const b = bombs[i],
+                previous = b.mesh.position.clone();
+              b.v.y -= 9.81 * dt;
+              b.mesh.position.addScaledVector(b.v, dt);
+              const hit = worldHit(previous, b.mesh.position, 1);
+              const target = groundTargets.find(
+                (t) =>
+                  t.alive &&
+                  C.segmentBox(
+                    previous,
+                    b.mesh.position,
+                    t.p.clone().addScalar(-22),
+                    t.p.clone().addScalar(22)
+                  ) !== null
+              );
+              if (hit !== null || target) {
+                const impact = hit !== null ? previous.lerp(b.mesh.position, hit) : b.mesh.position;
+                explosion(impact, true);
+                for (const t of groundTargets)
+                  if (t.alive && t.p.distanceTo(impact) < 100) {
+                    t.alive = false;
+                    t.mesh.visible = false;
+                    campaign.destroyed++;
+                    notice('RELAY DESTROYED / ' + campaign.destroyed + ' OF 3');
+                  }
+                scene.remove(b.mesh);
+                bombs.splice(i, 1);
+              }
+            }
+            const done =
+              campaign.type === 'escort'
+                ? campaign.elapsed >= 90 && escort?.alive
+                : campaign.type === 'strike'
+                  ? campaign.destroyed >= 3
+                  : state.kills >= campaign.goal;
+            if (done) {
+              endMatch(campaign.name + ' complete. Evacuation corridor secured.', 'victory');
+              return;
+            }
+            if ((escort && !escort.alive) || campaign.elapsed >= campaign.duration) {
+              endMatch(
+                escort && !escort.alive ? 'BLUEBIRD was lost. Escort failed.' : 'Mission time expired.',
+                'defeat'
+              );
+              return;
+            }
+          }
+        }
+        function spatialTone(frequency, duration, position) {
+          if (!audio || state.muted) return;
+          const osc = audio.createOscillator(),
+            gain = audio.createGain(),
+            pan = audio.createStereoPanner();
+          const local = position
+            .clone()
+            .sub(camera.position)
+            .applyQuaternion(camera.quaternion.clone().invert());
+          pan.pan.value = clamp(local.x / Math.max(1, Math.hypot(local.x, local.z)), -1, 1);
+          osc.frequency.value = frequency;
+          gain.gain.setValueAtTime(0.35, audio.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + duration);
+          osc.connect(gain).connect(pan).connect(audioMaster);
+          osc.start();
+          osc.stop(audio.currentTime + duration);
+          osc.onended = () => {
+            osc.disconnect();
+            gain.disconnect();
+            pan.disconnect();
+          };
+        }
+        function drawThreats(dt) {
+          const active = state.mode === 'playing';
+          const incoming = active
+            ? shots.filter((s) => s.owner !== player && !s.diverted && s.target === player)
+            : [];
+          const banner = $('threat-banner');
+          banner.hidden = !incoming.length;
+          let closest = null;
+          for (const s of incoming) {
+            const t = X.missileThreat(player.p, player.v, s.p, s.v);
+            if (!closest || t.eta < closest.eta) closest = { ...t, shot: s };
+          }
+          if (closest) {
+            const d = Math.round(closest.distance),
+              eta = Number.isFinite(closest.eta) ? closest.eta.toFixed(1) + 's' : 'OPENING';
+            const action =
+              player.flareCooldown > 0
+                ? 'FLARES ' + player.flareCooldown.toFixed(1) + 's / BREAK'
+                : d < 1100
+                  ? 'PRESS F / FLARE NOW'
+                  : 'PREPARE FLARES';
+            const message = '▲ MISSILE ' + d + ' M · ' + eta + ' · ' + action;
+            if (banner.textContent !== message) banner.textContent = message;
+            banner.style.background = fx.accessible ? '#684500ed' : '#7b1224e8';
+            threatTone -= dt;
+            if (threatTone <= 0) {
+              spatialTone(closest.eta < 1 ? 1100 : 780, 0.065, closest.shot.p);
+              threatTone = closest.interval;
+            }
+          } else threatTone = 0;
+          if (!active) return;
+          const color = fx.accessible ? '#ffe077' : '#ff5262';
+          ctx.save();
+          ctx.lineWidth = 2;
+          for (const shot of shots) {
+            if (shot.owner === player) continue;
+            const local = shot.p
+              .clone()
+              .sub(camera.position)
+              .applyQuaternion(camera.quaternion.clone().invert());
+            const screen = project(shot.p),
+              visible =
+                local.z < 0 &&
+                screen &&
+                screen.x > 25 &&
+                screen.x < width - 25 &&
+                screen.y > 75 &&
+                screen.y < height - 75;
+            let x, y;
+            if (visible) {
+              x = screen.x;
+              y = screen.y;
+            } else {
+              const angle = Math.atan2(-local.y, local.x);
+              x = width / 2 + Math.cos(angle) * Math.min(width * 0.42, 400);
+              y = height / 2 + Math.sin(angle) * Math.min(height * 0.34, 240);
+            }
+            ctx.strokeStyle = shot.diverted ? '#83f9d8' : color;
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.beginPath();
+            ctx.moveTo(x, y - 9);
+            ctx.lineTo(x + 8, y + 7);
+            ctx.lineTo(x - 8, y + 7);
+            ctx.closePath();
+            ctx.stroke();
+            label(
+              shot.diverted
+                ? 'DECOYED'
+                : Math.round(shot.p.distanceTo(player.p)) +
+                    ' M' +
+                    (!visible ? (local.z > 0 ? ' / BEHIND' : ' / OFFSCREEN') : ''),
+              x,
+              y + 23,
+              10,
+              ctx.strokeStyle,
+              'center'
+            );
+            if (visible && !shot.diverted) {
+              ctx.globalAlpha = 0.2;
+              ctx.beginPath();
+              ctx.arc(x, y, 18, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.globalAlpha = 1;
+            }
+          }
+          ctx.restore();
+        }
+        function drawExpedition(dt) {
+          drawThreats(dt);
+          if (state.mode !== 'playing') return;
+          const color = themeColors[fx.color];
+          $('aux-status').textContent = cannonMode()
+            ? ''
+            : (boostTime > 0
+                ? 'BOOST ACTIVE'
+                : boostCooldown > 0
+                  ? 'BOOST ' + boostCooldown.toFixed(1) + 's'
+                  : 'BOOST READY [T]') +
+              '\n' +
+              (selectedMissile === 'longrange' ? 'LR / 3.6 KM' : 'IR / 2.4 KM');
+          if (campaign) {
+            const remaining = Math.max(0, Math.ceil(campaign.duration - campaign.elapsed));
+            $('campaign-status').textContent =
+              campaign.name.toUpperCase() +
+              ' · ' +
+              remaining +
+              's / ' +
+              (campaign.type === 'escort'
+                ? 'BLUEBIRD ' +
+                  Math.ceil(escort.hp) +
+                  '% · ' +
+                  Math.ceil(Math.max(0, 90 - campaign.elapsed)) +
+                  's TO SAFETY'
+                : campaign.type === 'strike'
+                  ? campaign.destroyed + '/3 RELAYS · U DROP BOMB'
+                  : state.kills + '/' + campaign.goal + ' CONTACTS');
+          }
+          for (const p of pickups)
+            if (p.cooldown === 0) {
+              const s = project(p.mesh.position);
+              if (s?.visible)
+                label(
+                  (p.kind ? '◆ RESUPPLY' : '✚ REPAIR') +
+                    ' / ' +
+                    Math.round(p.mesh.position.distanceTo(player.p)) +
+                    ' M',
+                  s.x,
+                  s.y,
+                  10,
+                  p.kind ? '#ffd687' : '#72ffbc',
+                  'center'
+                );
+            }
+          for (const t of groundTargets)
+            if (t.alive) {
+              const s = project(t.p);
+              if (s?.visible)
+                label(
+                  '◇ RELAY / ' + Math.round(t.p.distanceTo(player.p)) + ' M',
+                  s.x,
+                  s.y,
+                  12,
+                  '#ffca8e',
+                  'center'
+                );
+            }
+          if (escort?.alive) {
+            const s = project(escort.p);
+            if (s?.visible)
+              label('◆ BLUEBIRD ' + Math.ceil(escort.hp) + '%', s.x, s.y - 25, 12, color, 'center');
+          }
+          if (campaign?.type === 'strike') {
+            const p = player.p.clone(),
+              v = player.v.clone();
+            for (let i = 0; i < 200; i++) {
+              v.y -= 9.81 * 0.1;
+              p.addScaledVector(v, 0.1);
+              if (p.y <= obstacleHeight(p.x, p.z)) {
+                const s = project(p);
+                if (s?.visible) {
+                  ctx.strokeStyle = color;
+                  ctx.strokeRect(s.x - 8, s.y - 8, 16, 16);
+                  label(bombCooldown > 0 ? 'REARM' : 'BOMB IMPACT [U]', s.x, s.y + 23, 9, color, 'center');
+                }
+                break;
+              }
+            }
+          }
+        }
+        function environmentFrame(dt) {
+          hangarBay.visible = state.mode === 'menu';
+          hangarBay.position.copy(player.p);
+          const mode = state.mode === 'menu' ? $('weather-choice').value : activeWeather;
+          const t =
+            mode === 'cycle' ? (Math.sin(state.time * 0.009 - 1.57) + 1) / 2 : mode === 'night' ? 1 : 0;
+          const storm = mode === 'storm',
+            foggy = mode === 'fog';
+          sky.material.uniforms.night.value = t;
+          sky.material.uniforms.sunset.value = mode === 'sunset' ? 1 : 0;
+          scene.environmentIntensity = 0.7 * (1 - t) + 0.15 * t;
+          sunlight.intensity = storm ? 0.7 : 2.2 * (1 - t) + 0.18 * t;
+          hemisphere.intensity = storm ? 0.7 : 1.4 * (1 - t) + 0.48 * t;
+          scene.fog.density = foggy ? 0.00033 : storm ? 0.00013 : 0.000043;
+          scene.fog.color.set(
+            storm
+              ? 0x657e91
+              : mode === 'sunset'
+                ? 0xbb9290
+                : t > 0.5
+                  ? 0x344969
+                  : state.arena === 'alpine'
+                    ? 0x617978
+                    : 0x99b9c8
+          );
+          sunlight.color.set(mode === 'sunset' ? 0xff9a55 : storm ? 0xb4d2ea : 0xffe0b4);
+          postMaterial.uniforms.night.value = t * 0.25;
+          postMaterial.uniforms.tint.value.set(
+            mode === 'sunset' ? 1.1 : 1,
+            mode === 'sunset' ? 0.88 : 1,
+            mode === 'sunset' ? 0.73 : 1
+          );
+          rain.visible = storm;
+          if (storm) {
+            for (let i = 0; i < 900; i++) {
+              const x = camera.position.x + Math.sin(i * 12.8) * 170,
+                y = camera.position.y + 140 - ((clock * 100 + i * 0.873) % 280),
+                z = camera.position.z + Math.cos(i * 7.7) * 170;
+              rainPositions.set([x, y, z, x + 2, y - 12, z], i * 6);
+            }
+            rainGeometry.attributes.position.needsUpdate = true;
+          }
+          if (storm && !reduced && Math.sin(clock * 0.35) > 0.9998) sunlight.intensity = 4;
+          if (state.mode === 'playing') {
+            fxTime += dt;
+            if (fxTime > 0.09) {
+              fxTime = 0;
+              for (const jet of [player, ...enemies])
+                if (jet.alive) {
+                  if (jet.speed > 205 || Math.abs(jet.angular.pitch) > 0.6) {
+                    const right = RIGHT.clone().applyQuaternion(jet.q);
+                    for (const side of [-1, 1])
+                      smoke.emit(
+                        jet.p.clone().addScaledVector(right, side * 8),
+                        zero,
+                        1.5,
+                        0.5,
+                        0xd8e8f0,
+                        1.4,
+                        0.25
+                      );
+                  }
+                  if (jet.hp < 55) {
+                    smoke.emit(
+                      jet.p.clone().addScaledVector(jet.forward(), -6),
+                      zero,
+                      2.5,
+                      2,
+                      0x37434b,
+                      6,
+                      0.6
+                    );
+                    if (jet.hp < 25) sparks.emit(jet.p, zero, 0.35, 4, 0xffaa44, 1, 0.7);
+                  }
+                }
+            }
+          }
+        }
+        function renderScene() {
+          if (!fx.post || $('quality').value === 'performance') {
+            renderer.render(scene, camera);
+            return;
+          }
+          const size = renderer.getDrawingBufferSize(new THREE.Vector2());
+          if (postTarget.width !== size.x || postTarget.height !== size.y) {
+            postTarget.setSize(size.x, size.y);
+            postMaterial.uniforms.pixel.value.set(1 / size.x, 1 / size.y);
+          }
+          postMaterial.uniforms.time.value = clock;
+          postMaterial.uniforms.heat.value =
+            state.mode === 'playing' && !state.pilotView ? player.throttle : 0;
+          postMaterial.uniforms.speed.value =
+            !reduced && shakeEnabled && state.mode === 'playing'
+              ? clamp((player.speed - 180) / 160, 0, 1)
+              : 0;
+          renderer.setRenderTarget(postTarget);
+          renderer.render(scene, camera);
+          renderer.setRenderTarget(null);
+          renderer.render(postScene, postCamera);
         }
         const flightCodes = new Set([
           ...Object.values(C.bindings).flat(),
@@ -7617,7 +9002,9 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           'KeyL',
           'KeyV',
           'KeyG',
-          'KeyJ'
+          'KeyJ',
+          'KeyT',
+          'KeyU'
         ]);
         let unlockAt = -1000;
         function showControls() {
@@ -7697,6 +9084,8 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           keys.add(event.code);
           if (C.bindings.missile.includes(event.code)) fireMissile(player);
           if (event.code === 'KeyF') deployFlares();
+          if (event.code === 'KeyT') useBoost();
+          if (event.code === 'KeyU') releaseBomb();
           if (event.code === 'KeyG') toggleGear();
           if (event.code === 'KeyJ' && state.missionMode === 'laststand' && !state.grounded) {
             state.deaths++;
@@ -7806,7 +9195,11 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           event.preventDefault();
           worldCanvas.focus();
           if (event.pointerType === 'touch') {
-            dragLook = { id: event.pointerId, x: event.clientX, y: event.clientY };
+            dragLook = {
+              id: event.pointerId,
+              x: event.clientX,
+              y: event.clientY
+            };
             worldCanvas.setPointerCapture(event.pointerId);
             return;
           }
@@ -8024,11 +9417,20 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           resize();
         };
         $('mission-type').onchange = () => {
+          $('campaign-setup').hidden = $('mission-type').value !== 'campaign';
+          const story = $('mission-type').value === 'campaign';
+          $('arena').disabled = story;
+          $('weather-choice').disabled = story;
+          if (story) {
+            $('arena').value = X.missions[campaignIndex].arena;
+            setTheater();
+            document.querySelector('.expedition').open = true;
+          }
           const selected = $('mission-type').value,
             guns = selected === 'duel' || selected === 'laststand';
           const practice = $('mission-type').value === 'familiarisation';
           $('opposition').disabled = $('contacts').disabled = practice;
-          $('contacts').disabled = practice || guns;
+          $('contacts').disabled = practice || guns || story;
           if (guns) $('contacts').value = selected === 'duel' ? '1' : '3';
           else if ($('contacts').value === '1') $('contacts').value = '5';
           $('contacts').querySelector('option[value="1"]').disabled = selected !== 'duel';
@@ -8053,6 +9455,11 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
               selected === 'duel'
                 ? 'Five rounds. One rival at a time. Close the distance, find your angle, and make the burst count. Same fighter. Same cannon. No lock-on.'
                 : 'Fight in the air. Get shot down, or press J to eject. Then turn the tables with a ground railgun: three aircraft, ninety seconds, no second chance.';
+          if (story) {
+            $('mission-brief').textContent = X.missions[campaignIndex].text;
+            document.querySelector('.briefing-copy h1').innerHTML = 'GLASS<span>MERIDIAN.</span>';
+          }
+          $('weapon-choice').disabled = guns || practice;
           updateControlLabels();
         };
         $('arena').onchange = () => {
@@ -8101,6 +9508,8 @@ gl_FragColor=vec4(mix(col,dusk,rugged),1.);}`
           else deployFlares();
         };
         $('touch-center').onclick = recenter;
+        $('touch-boost').onclick = useBoost;
+        $('touch-bomb').onclick = releaseBomb;
         window.addEventListener('resize', resize);
         worldCanvas.addEventListener('webglcontextlost', (event) => {
           event.preventDefault();
